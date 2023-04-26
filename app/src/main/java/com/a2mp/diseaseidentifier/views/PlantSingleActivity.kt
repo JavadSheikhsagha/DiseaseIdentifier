@@ -1,5 +1,6 @@
 package com.a2mp.diseaseidentifier.views
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.a2mp.diseaseidentifier.R
@@ -14,9 +15,7 @@ class PlantSingleActivity : AppCompatActivity() {
         binding = ActivityPlantSingleBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         setupViews()
-
 
 
     }
@@ -25,6 +24,10 @@ class PlantSingleActivity : AppCompatActivity() {
 
         binding.btnBack.setOnClickListener {
             finish()
+        }
+
+        binding.btnSeeDiseases.setOnClickListener {
+            startActivity(Intent(this, PlantInfoActivity::class.java))
         }
     }
 }
