@@ -1,5 +1,6 @@
 package com.a2mp.diseaseidentifier.views
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.a2mp.diseaseidentifier.R
@@ -23,6 +24,18 @@ class PlantInfoActivity : AppCompatActivity() {
 
         binding.btnBack.setOnClickListener {
             finish()
+        }
+
+        binding.cardDisease1.setOnClickListener {
+            startActivity(Intent(this, DiseaseSingleActivity::class.java))
+        }
+
+        binding.cardDisease2.setOnClickListener {
+            startActivity(Intent(this, DiseaseSingleActivity::class.java))
+        }
+
+        binding.cardDisease3.setOnClickListener {
+            startActivity(Intent(this, DiseaseSingleActivity::class.java))
         }
 
     }
