@@ -8,6 +8,8 @@
     <color name="black">#FF000000</color>
     <color name="accentColor">#00795D</color>
     <color name="textColor">#45454A</color>
+    <color name="textColorTitle">#555555</color>
+    <color name="textColorGray">#B7B7B7</color>
     <color name="white">#FFFFFFFF</color>
     <color name="btnColor">#00BD91</color>
     <color name="appBackgroundColor">#E8F7F5</color>

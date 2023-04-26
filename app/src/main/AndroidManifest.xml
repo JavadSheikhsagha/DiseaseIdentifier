@@ -13,42 +13,42 @@
         android:theme="@style/Theme.DiseaseIdentifier"
         tools:targetApi="31">
         <activity
-            android:name=".ErrorActivity"
+            android:name=".views.ErrorActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".PlantInfoActivity"
+            android:name=".views.PlantInfoActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".DiseaseSingleActivity"
+            android:name=".views.DiseaseSingleActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".PlantSingleActivity"
+            android:name=".views.PlantSingleActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".PurchaseActivity"
+            android:name=".views.PurchaseActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".LoadingActivity"
+            android:name=".views.LoadingActivity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

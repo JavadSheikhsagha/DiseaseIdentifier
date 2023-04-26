@@ -25,6 +25,15 @@ class MainActivity : AppCompatActivity() {
         isFirstTime()
 
 
+        setupViews()
+
+    }
+
+    private fun setupViews() {
+
+        binding.btnOnBoardingActivityLetsgo.setOnClickListener {
+            startActivity(Intent(this, PlantSingleActivity::class.java))
+        }
     }
 
     private fun isFirstTime() {
