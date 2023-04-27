@@ -13,8 +13,8 @@ import com.a2mp.diseaseidentifier.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel : MainViewModel
-    private lateinit var binding : ActivityMainBinding
+    private lateinit var viewModel: MainViewModel
+    private lateinit var binding: ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,7 +32,11 @@ class MainActivity : AppCompatActivity() {
     private fun setupViews() {
 
         binding.btnOnBoardingActivityLetsgo.setOnClickListener {
-            startActivity(Intent(this, PlantSingleActivity::class.java))
+            startActivity(Intent(this, CameraActivity::class.java))
+        }
+
+        binding.btnSettings.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
         }
     }
 

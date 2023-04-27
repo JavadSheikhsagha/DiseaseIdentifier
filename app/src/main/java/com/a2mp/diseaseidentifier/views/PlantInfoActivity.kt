@@ -38,5 +38,8 @@ class PlantInfoActivity : AppCompatActivity() {
             startActivity(Intent(this, DiseaseSingleActivity::class.java))
         }
 
+        binding.btnSettings.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
     }
 }

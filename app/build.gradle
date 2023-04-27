@@ -55,8 +55,9 @@ dependencies {
     implementation "androidx.fragment:fragment-ktx:1.5.7"
     implementation "androidx.lifecycle:lifecycle-livedata:2.6.1"
 
-//    // Camera
-//    implementation "dev.priyankvasa.android:cameraview-ex:3.5.5-alpha"
+    //camera
+    api 'com.otaliastudios:cameraview:2.7.2'
+    implementation 'com.github.markusfisch:CameraView:1.9.2'
 
 
     implementation 'com.squareup.retrofit2:retrofit:2.9.0'

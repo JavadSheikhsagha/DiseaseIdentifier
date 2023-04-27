@@ -29,5 +29,9 @@ class PlantSingleActivity : AppCompatActivity() {
         binding.btnSeeDiseases.setOnClickListener {
             startActivity(Intent(this, PlantInfoActivity::class.java))
         }
+
+        binding.btnSettings.setOnClickListener {
+            startActivity(Intent(this, SettingsActivity::class.java))
+        }
     }
 }
