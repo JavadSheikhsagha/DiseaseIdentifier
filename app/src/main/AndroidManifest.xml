@@ -2,7 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CAMERA"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-feature android:name="android.hardware.camera2.full"/>
 
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -37,6 +39,14 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <activity
+            android:name=".views.camera.CustomCameraUI"
+            android:exported="true">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
             android:name=".views.DiseaseSingleActivity"
             android:exported="false">
@@ -66,7 +76,7 @@
                 android:value="" />
         </activity>
         <activity
-            android:name=".views.CameraActivity"
+            android:name=".views.camera.Camera2Activity"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"

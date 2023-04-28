@@ -4,12 +4,10 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.get
 import com.a2mp.diseaseidentifier.viewmodel.MainViewModel
-import com.a2mp.diseaseidentifier.R
 import com.a2mp.diseaseidentifier.databinding.ActivityMainBinding
+import com.a2mp.diseaseidentifier.views.camera.Camera2Activity
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupViews() {
 
         binding.btnOnBoardingActivityLetsgo.setOnClickListener {
-            startActivity(Intent(this, CameraActivity::class.java))
+            startActivity(Intent(this, Camera2Activity::class.java))
         }
 
         binding.btnSettings.setOnClickListener {

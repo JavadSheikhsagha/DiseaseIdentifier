@@ -3,8 +3,8 @@ package com.a2mp.diseaseidentifier.views
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import com.a2mp.diseaseidentifier.R
 import com.a2mp.diseaseidentifier.databinding.ActivityErrorBinding
+import com.a2mp.diseaseidentifier.views.camera.Camera2Activity
 
 class ErrorActivity : AppCompatActivity() {
 
@@ -26,7 +26,7 @@ class ErrorActivity : AppCompatActivity() {
         }
 
         binding.btnTakesnap.setOnClickListener {
-            startActivity(Intent(this, CameraActivity::class.java))
+            startActivity(Intent(this, Camera2Activity::class.java))
             finish()
         }
     }
