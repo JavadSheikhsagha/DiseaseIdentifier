@@ -4,6 +4,8 @@ package com.a2mp.diseaseidentifier.views.camera;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.camera2.CameraAccessException;
@@ -28,6 +30,7 @@ import android.view.Surface;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -47,7 +50,7 @@ import java.util.List;
 
 public class Camera2Activity extends AppCompatActivity {
     private static final String TAG = "AndroidCameraApi";
-    private Button takePictureButton;
+    private ImageView takePictureButton;
     private TextureView textureView;
     private static final SparseIntArray ORIENTATIONS = new SparseIntArray();
 
@@ -70,6 +73,7 @@ public class Camera2Activity extends AppCompatActivity {
     private boolean mFlashSupported;
     private Handler mBackgroundHandler;
     private HandlerThread mBackgroundThread;
+    private ImageView imgGallery;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +82,26 @@ public class Camera2Activity extends AppCompatActivity {
         textureView = (TextureView) findViewById(R.id.texture);
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
-        takePictureButton = (Button) findViewById(R.id.btn_takepicture);
+        takePictureButton = (ImageView) findViewById(R.id.btn_takepicture);
+        findViewById(R.id.icon_back).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        findViewById(R.id.icon_flash).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+        ImageView img = findViewById(R.id.img_snapTips);
+        if (Camera2Activity.this.getSharedPreferences("camera", Context.MODE_PRIVATE).getBoolean("firsttime", true)) {
+            img.setVisibility(View.VISIBLE);
+            img.animate().alpha(0.0F).setDuration(700).setStartDelay(3000).start();
+            Camera2Activity.this.getSharedPreferences("camera", Context.MODE_PRIVATE).edit().putBoolean("firsttime", false).apply();
+        }
+        imgGallery = findViewById(R.id.img_gallery);
         assert takePictureButton != null;
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -133,7 +156,7 @@ public class Camera2Activity extends AppCompatActivity {
         @Override
         public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
             super.onCaptureCompleted(session, request, result);
-            Toast.makeText(Camera2Activity.this, "Saved:" + file, Toast.LENGTH_SHORT).show();
+            Toast.makeText(Camera2Activity.this, "ssss:" + file, Toast.LENGTH_SHORT).show();
             createCameraPreview();
         }
     };
@@ -184,6 +207,8 @@ public class Camera2Activity extends AppCompatActivity {
             int rotation = getWindowManager().getDefaultDisplay().getRotation();
             captureBuilder.set(CaptureRequest.JPEG_ORIENTATION, ORIENTATIONS.get(rotation));
             final File file = new File(Environment.getExternalStorageDirectory() + "/pic.jpg");
+            file.mkdirs();
+            file.mkdir();
             ImageReader.OnImageAvailableListener readerListener = new ImageReader.OnImageAvailableListener() {
                 @Override
                 public void onImageAvailable(ImageReader reader) {
@@ -194,6 +219,10 @@ public class Camera2Activity extends AppCompatActivity {
                         byte[] bytes = new byte[buffer.capacity()];
                         buffer.get(bytes);
                         save(bytes);
+                        BitmapFactory.Options options = new BitmapFactory.Options();
+                        options.inMutable = true;
+                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, options);
+                        imgGallery.setImageBitmap(bmp);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException e) {
@@ -222,7 +251,18 @@ public class Camera2Activity extends AppCompatActivity {
                 @Override
                 public void onCaptureCompleted(CameraCaptureSession session, CaptureRequest request, TotalCaptureResult result) {
                     super.onCaptureCompleted(session, request, result);
+
+                    Log.i(TAG, "onImageAvailable: saveddddd");
+
                     Toast.makeText(Camera2Activity.this, "Saved:" + file, Toast.LENGTH_SHORT).show();
+                    Bitmap bitmap = BitmapFactory.decodeFile(file.getPath());
+                    new Thread(() -> {
+                        //run code on background thread
+                        Camera2Activity.this.runOnUiThread(() -> {
+                            //update the UI on main thread
+                            imgGallery.setImageBitmap(bitmap);
+                        });
+                    }).start();
                     createCameraPreview();
                 }
             };
@@ -230,6 +270,7 @@ public class Camera2Activity extends AppCompatActivity {
                 @Override
                 public void onConfigured(CameraCaptureSession session) {
                     try {
+
                         session.capture(captureBuilder.build(), captureListener, mBackgroundHandler);
                     } catch (CameraAccessException e) {
                         e.printStackTrace();
@@ -260,6 +301,7 @@ public class Camera2Activity extends AppCompatActivity {
                     if (null == cameraDevice) {
                         return;
                     }
+
                     // When the session is ready, we start displaying the preview.
                     cameraCaptureSessions = cameraCaptureSession;
                     updatePreview();
@@ -289,6 +331,7 @@ public class Camera2Activity extends AppCompatActivity {
                 ActivityCompat.requestPermissions(Camera2Activity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, REQUEST_CAMERA_PERMISSION);
                 return;
             }
+
             manager.openCamera(cameraId, stateCallback, null);
         } catch (CameraAccessException e) {
             e.printStackTrace();
@@ -320,7 +363,7 @@ public class Camera2Activity extends AppCompatActivity {
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, String[] permissions,int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == REQUEST_CAMERA_PERMISSION) {
             if (grantResults[0] == PackageManager.PERMISSION_DENIED) {

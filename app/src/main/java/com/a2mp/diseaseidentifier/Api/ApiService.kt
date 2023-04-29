@@ -1,9 +1,19 @@
 package com.a2mp.diseaseidentifier.Api
 
-import retrofit2.http.POST
+import okhttp3.MultipartBody
+import retrofit2.Call
+import retrofit2.http.*
+
 
 interface ApiService {
 
+
+
+    @Multipart
     @POST("")
-    fun getImage()
+    fun uploadAttachment(
+        @Part filePart: MultipartBody.Part,
+        @Part name: MultipartBody.Part
+    ): Call<String?>?
+
 }
