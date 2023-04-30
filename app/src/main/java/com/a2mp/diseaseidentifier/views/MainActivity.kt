@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupViews() {
 
         binding.btnOnBoardingActivityLetsgo.setOnClickListener {
-            startActivity(Intent(this, LoadingActivity::class.java))
+            startActivity(Intent(this, Camera2Activity::class.java))
         }
 
         binding.btnSettings.setOnClickListener {

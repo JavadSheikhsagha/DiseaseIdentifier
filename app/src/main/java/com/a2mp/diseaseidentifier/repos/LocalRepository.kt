@@ -13,24 +13,11 @@ import java.io.ByteArrayOutputStream
 import java.io.File
 
 
-class LocalRepository(val context: Context) {
+class LocalRepository() {
 
     private val apiService = ApiClient.getIdentifyRetrofit()
-    private val identifyService = ApiClient.getIdentifyRetrofit()
-    private val getHealthService = ApiClient.getIdentifyRetrofit()
-
-    fun getIsFirstTime(): Boolean {
-
-        return context.getSharedPreferences("shared_pref", Context.MODE_PRIVATE)
-            .getBoolean("isFirstTime", true)
-    }
-
-    fun setIsFirstTimeTrue() {
-        context.getSharedPreferences("shared_pref", Context.MODE_PRIVATE)
-            .edit()
-            .putBoolean("isFirstTime", false)
-            .apply()
-    }
+    private val identifyService = ApiClient.getFindPlantByNameRetrofit()
+    private val getHealthService = ApiClient.getHealthStatusDirectForRetrofit()
 
     fun identify(file: File) : Call<String?> {
         val filePart = MultipartBody.Part.createFormData(

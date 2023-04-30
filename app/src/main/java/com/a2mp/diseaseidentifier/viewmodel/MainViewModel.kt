@@ -8,6 +8,8 @@ import kotlinx.coroutines.launch
 class MainViewModel(application: Application) : AndroidViewModel(application) {
 
 
+    val repository = LocalRepository()
+
 
 
 }

@@ -1,11 +1,14 @@
 package com.a2mp.diseaseidentifier.views
 
-import androidx.appcompat.app.AppCompatActivity
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.os.Bundle
 import androidx.activity.viewModels
-import com.a2mp.diseaseidentifier.R
+import androidx.appcompat.app.AppCompatActivity
 import com.a2mp.diseaseidentifier.databinding.ActivityLoadingBinding
 import com.a2mp.diseaseidentifier.viewmodel.MainViewModel
+import java.io.FileInputStream
+
 
 class LoadingActivity : AppCompatActivity() {
 
@@ -20,6 +23,32 @@ class LoadingActivity : AppCompatActivity() {
 
         setupViews()
 
+        val bmp = getBitmapData()
+
+        if (bmp != null) {
+
+            // request
+
+        } else {
+            finish()
+        }
+
+    }
+
+    private fun getBitmapData() : Bitmap? {
+
+        val bmp: Bitmap?
+        val filename = intent.getStringExtra("image")
+        try {
+            val `is`: FileInputStream = openFileInput(filename)
+            bmp = BitmapFactory.decodeStream(`is`)
+            return  bmp
+
+            `is`.close()
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
     }
 
     private fun setupViews() {
@@ -28,7 +57,7 @@ class LoadingActivity : AppCompatActivity() {
         startInner()
     }
 
-    fun startInner() {
+    private fun startInner() {
         binding.imgLoadingInner.animate()
             .setDuration(800)
             .rotationBy(220f)
@@ -38,7 +67,7 @@ class LoadingActivity : AppCompatActivity() {
             .start()
     }
 
-    fun startOuter() {
+    private fun startOuter() {
         binding.imgLoadingOuter.animate()
             .setDuration(500)
             .rotationBy(180f)
@@ -48,7 +77,7 @@ class LoadingActivity : AppCompatActivity() {
             .start()
     }
 
-    fun endInner() {
+    private fun endInner() {
         binding.imgLoadingInner.animate()
             .setDuration(400)
             .rotationBy(70f)
@@ -58,7 +87,7 @@ class LoadingActivity : AppCompatActivity() {
             .start()
     }
 
-    fun endOuter() {
+    private fun endOuter() {
         binding.imgLoadingOuter.animate()
             .setDuration(800)
             .rotationBy(-30f)

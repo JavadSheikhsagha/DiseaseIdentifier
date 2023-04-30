@@ -3,7 +3,9 @@ package com.a2mp.diseaseidentifier.views.camera;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
@@ -19,10 +21,12 @@ import android.hardware.camera2.TotalCaptureResult;
 import android.hardware.camera2.params.StreamConfigurationMap;
 import android.media.Image;
 import android.media.ImageReader;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.HandlerThread;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.util.Size;
 import android.util.SparseIntArray;
@@ -33,10 +37,15 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
 import com.a2mp.diseaseidentifier.R;
+import com.a2mp.diseaseidentifier.views.LoadingActivity;
+import com.permissionx.guolindev.PermissionX;
+import com.permissionx.guolindev.callback.RequestCallback;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -75,10 +84,15 @@ public class Camera2Activity extends AppCompatActivity {
     private HandlerThread mBackgroundThread;
     private ImageView imgGallery;
 
+    public static final int PICK_IMAGE = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_camera);
+
+        getPermissions();
+
         textureView = (TextureView) findViewById(R.id.texture);
         assert textureView != null;
         textureView.setSurfaceTextureListener(textureListener);
@@ -102,6 +116,19 @@ public class Camera2Activity extends AppCompatActivity {
             Camera2Activity.this.getSharedPreferences("camera", Context.MODE_PRIVATE).edit().putBoolean("firsttime", false).apply();
         }
         imgGallery = findViewById(R.id.img_gallery);
+        imgGallery.setOnClickListener(v -> {
+
+            Intent getIntent = new Intent(Intent.ACTION_GET_CONTENT);
+            getIntent.setType("image/*");
+
+            Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            pickIntent.setType("image/*");
+
+            Intent chooserIntent = Intent.createChooser(getIntent, "Select Image");
+            chooserIntent.putExtra(Intent.EXTRA_INITIAL_INTENTS, new Intent[]{pickIntent});
+
+            startActivityForResult(chooserIntent, PICK_IMAGE);
+        });
         assert takePictureButton != null;
         takePictureButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -109,6 +136,16 @@ public class Camera2Activity extends AppCompatActivity {
                 takePicture();
             }
         });
+    }
+
+    private void getPermissions() {
+        PermissionX.init(this)
+                .permissions(Manifest.permission.READ_EXTERNAL_STORAGE)
+                .request((allGranted, grantedList, deniedList) -> {
+                    if (!allGranted) {
+                        getPermissions();
+                    }
+                });
     }
 
     TextureView.SurfaceTextureListener textureListener = new TextureView.SurfaceTextureListener() {
@@ -161,6 +198,7 @@ public class Camera2Activity extends AppCompatActivity {
         }
     };
 
+
     protected void startBackgroundThread() {
         mBackgroundThread = new HandlerThread("Camera Background");
         mBackgroundThread.start();
@@ -175,6 +213,46 @@ public class Camera2Activity extends AppCompatActivity {
             mBackgroundHandler = null;
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == PICK_IMAGE) {
+            if (resultCode == RESULT_OK) {
+                Uri selectedImage = data.getData();
+                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+
+                Cursor cursor = getContentResolver().query(selectedImage,
+                        filePathColumn, null, null, null);
+                cursor.moveToFirst();
+
+                int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+                String picturePath = cursor.getString(columnIndex);
+                cursor.close();
+
+                Bitmap bitmap = BitmapFactory.decodeFile(picturePath);
+                try {
+                    //Write file
+                    String filename = "bitmap.png";
+                    FileOutputStream stream = this.openFileOutput(filename, Context.MODE_PRIVATE);
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 100, stream);
+
+                    //Cleanup
+                    stream.close();
+                    bitmap.recycle();
+
+                    //Pop intent
+                    Intent in1 = new Intent(this, LoadingActivity.class);
+                    in1.putExtra("image", filename);
+                    startActivity(in1);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
         }
     }
 
