@@ -14,6 +14,16 @@ interface ApiService {
     fun uploadAttachment(
         @Part filePart: MultipartBody.Part,
         @Part name: MultipartBody.Part
-    ): Call<String?>?
+    ): Call<String?>
 
+    @GET("plants")
+    fun getPlant(
+        @Query("search") name:String
+    ) : Call<String?>
+
+
+    @POST("")
+    fun getHealthStatusDirectFor(
+        @Body string: String
+    ) : Call<String?>
 }

@@ -1,16 +1,23 @@
 package com.a2mp.diseaseidentifier.repos
 
 import android.content.Context
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.util.Base64
 import com.a2mp.diseaseidentifier.Api.ApiClient
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import retrofit2.Call
+import java.io.ByteArrayOutputStream
 import java.io.File
 
 
 class LocalRepository(val context: Context) {
 
-    private val apiService = ApiClient.getRetrofit()
+    private val apiService = ApiClient.getIdentifyRetrofit()
+    private val identifyService = ApiClient.getIdentifyRetrofit()
+    private val getHealthService = ApiClient.getIdentifyRetrofit()
 
     fun getIsFirstTime(): Boolean {
 
@@ -25,7 +32,7 @@ class LocalRepository(val context: Context) {
             .apply()
     }
 
-    fun identify(file: File) {
+    fun identify(file: File) : Call<String?> {
         val filePart = MultipartBody.Part.createFormData(
             "images",
             "file.jpg",
@@ -35,6 +42,24 @@ class LocalRepository(val context: Context) {
             "organs",
             "leaf"
         )
-        apiService.uploadAttachment(filePart, name)
+        return identifyService.uploadAttachment(filePart, name)
     }
+
+    fun getHealthStatusDirectFor(file:File) : Call<String?> {
+        val bm = BitmapFactory.decodeFile(file.path)
+        val baos = ByteArrayOutputStream()
+        bm.compress(Bitmap.CompressFormat.JPEG, 100, baos) // bm is the bitmap object
+
+        val b: ByteArray = baos.toByteArray()
+        val bytes = Base64.encodeToString(b, Base64.DEFAULT)
+
+
+        return getHealthService.getHealthStatusDirectFor("")
+    }
+
+    fun getPlant(searchStr: String) : Call<String?> {
+        return apiService.getPlant(searchStr)
+    }
+
+
 }
