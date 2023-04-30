@@ -23,7 +23,7 @@ object ApiClient {
 
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://my-api.plantnet.org/v2/identify/all?api-key=${list.random()}")
+            .baseUrl("https://my-api.plantnet.org/v2/identify/")
             .client(client)
             .build()
             .create(ApiService::class.java)
@@ -41,7 +41,7 @@ object ApiClient {
 
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://api.plant.id/v2/health_assessment")
+            .baseUrl("https://api.plant.id/v2/")
             .client(client)
             .build()
             .create(ApiService::class.java)

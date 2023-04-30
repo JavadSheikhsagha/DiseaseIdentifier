@@ -8,22 +8,21 @@ import retrofit2.http.*
 interface ApiService {
 
 
-
     @Multipart
-    @POST("")
+    @POST("all")
     fun uploadAttachment(
         @Part filePart: MultipartBody.Part,
-        @Part name: MultipartBody.Part
+        @Part name: MultipartBody.Part,
+        @Query(value = "api-key") str: String
     ): Call<String?>
 
     @GET("plants")
     fun getPlant(
-        @Query("search") name:String
-    ) : Call<String?>
+        @Query("search") name: String
+    ): Call<String?>
 
-
-    @POST("")
+    @POST("health_assessment")
     fun getHealthStatusDirectFor(
         @Body string: String
-    ) : Call<String?>
+    ): Call<String?>
 }

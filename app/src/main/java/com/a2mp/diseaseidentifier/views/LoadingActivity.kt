@@ -1,13 +1,20 @@
 package com.a2mp.diseaseidentifier.views
 
+import android.R.attr.bitmap
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.a2mp.diseaseidentifier.databinding.ActivityLoadingBinding
 import com.a2mp.diseaseidentifier.viewmodel.MainViewModel
-import java.io.FileInputStream
+import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import java.io.*
 
 
 class LoadingActivity : AppCompatActivity() {
@@ -16,6 +23,7 @@ class LoadingActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<MainViewModel>()
 
+    @SuppressLint("WrongThread")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoadingBinding.inflate(layoutInflater)
@@ -23,14 +31,17 @@ class LoadingActivity : AppCompatActivity() {
 
         setupViews()
 
-        val bmp = getBitmapData()
 
-        if (bmp != null) {
+        imageBitmap?.let {
+            Log.i("LOG25", "onCreate: isnt null")
 
-            // request
+            viewModel.identify(it)
 
-        } else {
-            finish()
+        }
+
+
+        viewModel.identifyModel.observe(this,) {
+
         }
 
     }
