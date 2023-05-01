@@ -1,9 +1,12 @@
 package com.a2mp.diseaseidentifier.Api
 
+import okhttp3.Interceptor
 import okhttp3.OkHttpClient
+import okhttp3.Response
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.IOException
 
 
 object ApiClient {
@@ -33,7 +36,7 @@ object ApiClient {
 
         val interceptor = HttpLoggingInterceptor()
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val client = OkHttpClient.Builder().addInterceptor(interceptor).build()
+        val client = OkHttpClient.Builder().addInterceptor(MyInterceptor()).addInterceptor(interceptor).build()
 
         val list = listOf(
             "C71wQQpmQIrFHzpJZq09Dj4bsjnXMX3dbVHJSBZsbti8nkInu3"
@@ -59,4 +62,21 @@ object ApiClient {
             .build()
             .create(ApiService::class.java)
     }
+}
+
+class MyInterceptor : Interceptor {
+    //throw an exception to cancel request
+    @Throws(IOException::class)
+
+    override fun intercept(chain: Interceptor.Chain): Response {
+
+        val request = chain.request()
+            .newBuilder() // returns Request.Builder
+            .addHeader("Api-Key", "C71wQQpmQIrFHzpJZq09Dj4bsjnXMX3dbVHJSBZsbti8nkInu3")
+            .build()
+
+        //proceed with the request
+        return chain.proceed(request)
+    }
+
 }

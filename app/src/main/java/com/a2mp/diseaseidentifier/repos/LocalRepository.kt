@@ -5,6 +5,8 @@ import android.graphics.BitmapFactory
 import android.util.Base64
 import android.util.Log
 import com.a2mp.diseaseidentifier.Api.ApiClient
+import com.a2mp.diseaseidentifier.models.DiseaseRequestModel
+import com.a2mp.diseaseidentifier.models.IdentifyModel
 import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -22,7 +24,7 @@ class LocalRepository {
     private val identifyService = ApiClient.getFindPlantByNameRetrofit()
     private val getHealthService = ApiClient.getHealthStatusDirectForRetrofit()
 
-    fun identify(file: Bitmap) : Call<String?> {
+    fun identify(file: Bitmap) : Call<IdentifyModel?> {
         val stream = ByteArrayOutputStream()
         file.compress(Bitmap.CompressFormat.JPEG, 40, stream)
         val size: Int = file.rowBytes * file.height
@@ -57,9 +59,25 @@ class LocalRepository {
         val bytes = Base64.encodeToString(b, Base64.DEFAULT)
 
 
+        val images = listOf<String>(bytes)
+        val diseaseDetails = listOf(
+            "cause",
+            "common_names",
+            "classification",
+            "description",
+            "treatment",
+            "url",
+            "url_small",
+            "similar_images"
+        )
+        val modifiers = listOf("similar_images")
 
 
-        return getHealthService.getHealthStatusDirectFor("json")
+        return getHealthService.getHealthStatusDirectFor(DiseaseRequestModel(
+            images = images,
+            disease_details = diseaseDetails,
+            modifiers = modifiers
+        ))
     }
 
     fun getPlant(searchStr: String) : Call<String?> {

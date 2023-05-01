@@ -2,6 +2,7 @@ package com.a2mp.diseaseidentifier.views
 
 import android.R.attr.bitmap
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.Bundle
@@ -42,6 +43,10 @@ class LoadingActivity : AppCompatActivity() {
 
         viewModel.identifyModel.observe(this,) {
 
+            if (it?.name!= null) {
+                startActivity(Intent(this, PlantSingleActivity::class.java))
+                finish()
+            }
         }
 
     }
@@ -70,7 +75,7 @@ class LoadingActivity : AppCompatActivity() {
 
     private fun startInner() {
         binding.imgLoadingInner.animate()
-            .setDuration(800)
+            .setDuration(1000)
             .rotationBy(220f)
             .withEndAction {
                 endInner()
@@ -80,7 +85,7 @@ class LoadingActivity : AppCompatActivity() {
 
     private fun startOuter() {
         binding.imgLoadingOuter.animate()
-            .setDuration(500)
+            .setDuration(700)
             .rotationBy(180f)
             .withEndAction {
                 endOuter()
@@ -90,7 +95,7 @@ class LoadingActivity : AppCompatActivity() {
 
     private fun endInner() {
         binding.imgLoadingInner.animate()
-            .setDuration(400)
+            .setDuration(600)
             .rotationBy(70f)
             .withEndAction {
                 startInner()
@@ -100,7 +105,7 @@ class LoadingActivity : AppCompatActivity() {
 
     private fun endOuter() {
         binding.imgLoadingOuter.animate()
-            .setDuration(800)
+            .setDuration(1000)
             .rotationBy(-30f)
             .withEndAction {
                 startOuter()
