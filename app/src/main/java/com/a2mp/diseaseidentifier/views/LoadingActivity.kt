@@ -44,10 +44,25 @@ class LoadingActivity : AppCompatActivity() {
         viewModel.identifyModel.observe(this,) {
 
             if (it?.name!= null) {
-                startActivity(Intent(this, PlantSingleActivity::class.java))
+                viewModel.healthStatusForModel.observe(this) {
+                    Log.i("LOG26", "onCreate: $it")
+                    if (it?.images != null) {
+                        startActivity(Intent(this, PlantSingleActivity::class.java))
+                        finish()
+                    } else {
+                        Log.i("LOG28", "onCreate: ")
+                        startActivity(Intent(this, ErrorActivity::class.java))
+                        finish()
+                    }
+                }
+            } else {
+                Log.i("LOG27", "onCreate: ")
+                startActivity(Intent(this, ErrorActivity::class.java))
                 finish()
             }
         }
+
+
 
     }
 

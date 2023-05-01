@@ -6,6 +6,7 @@ import android.util.Base64
 import android.util.Log
 import com.a2mp.diseaseidentifier.Api.ApiClient
 import com.a2mp.diseaseidentifier.models.DiseaseRequestModel
+import com.a2mp.diseaseidentifier.models.DiseaseResponseModel
 import com.a2mp.diseaseidentifier.models.IdentifyModel
 import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -50,7 +51,7 @@ class LocalRepository {
         return apiService.uploadAttachment(filePart, name, list.random())
     }
 
-    fun getHealthStatusDirectFor() : Call<String?> {
+    fun getHealthStatusDirectFor() : Call<DiseaseResponseModel?> {
         val bm = imageBitmap
         val baos = ByteArrayOutputStream()
         bm?.compress(Bitmap.CompressFormat.JPEG, 100, baos) // bm is the bitmap object

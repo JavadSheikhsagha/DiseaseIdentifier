@@ -4,6 +4,7 @@ import android.app.Application
 import android.graphics.Bitmap
 import android.util.Log
 import androidx.lifecycle.*
+import com.a2mp.diseaseidentifier.models.DiseaseResponseModel
 import com.a2mp.diseaseidentifier.models.IdentifyModel
 import com.a2mp.diseaseidentifier.models.PlantNetIdentifyPlantModel
 import com.a2mp.diseaseidentifier.repos.LocalRepository
@@ -20,7 +21,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     val repository = LocalRepository()
 
     val identifyModel : MutableLiveData<PlantNetIdentifyPlantModel?> = MutableLiveData()
-    val healthStatusForModel : MutableLiveData<String?> = MutableLiveData()
+    val healthStatusForModel : MutableLiveData<DiseaseResponseModel?> = MutableLiveData()
 
 
     fun identify(file: Bitmap) {
@@ -44,7 +45,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                     override fun onFailure(call: Call<IdentifyModel?>, t: Throwable) {
                         Log.i("LOG23", "onResponse: DIDnt GET identify ${t.message}")
-//                        getHealthStatusDirectFor()
+                        identifyModel.postValue(null)
 
                     }
                 })
@@ -58,15 +59,18 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
 
             repository.getHealthStatusDirectFor()
-                .enqueue(object : Callback<String?> {
-                    override fun onResponse(call: Call<String?>, response: Response<String?>) {
-                        Log.i("LOG24", "onResponse: DID GET identify")
+                .enqueue(object : Callback<DiseaseResponseModel?> {
+                    override fun onResponse(call: Call<DiseaseResponseModel?>, response: Response<DiseaseResponseModel?>) {
+                        Log.i("LOG24", "onResponse: DID getHealthStatusDirectFor")
 
+                        response.body()?.let {
+                            healthStatusForModel.postValue(it)
+                        }
                     }
 
-                    override fun onFailure(call: Call<String?>, t: Throwable) {
-                        Log.i("LOG24", "onResponse: DIDnt GET identify ${t.localizedMessage}")
-
+                    override fun onFailure(call: Call<DiseaseResponseModel?>, t: Throwable) {
+                        Log.i("LOG24", "onResponse: DIDnt getHealthStatusDirectFor ${t.localizedMessage}")
+                        healthStatusForModel.postValue(null)
                     }
                 })
         }
