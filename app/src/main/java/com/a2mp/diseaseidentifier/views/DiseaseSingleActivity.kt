@@ -3,8 +3,10 @@ package com.a2mp.diseaseidentifier.views
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import com.a2mp.diseaseidentifier.R
 import com.a2mp.diseaseidentifier.databinding.ActivityDiseaseSingleBinding
+import com.a2mp.diseaseidentifier.repos.AppSharedPref
 
 class DiseaseSingleActivity : AppCompatActivity() {
 
@@ -27,6 +29,14 @@ class DiseaseSingleActivity : AppCompatActivity() {
 
         binding.btnSettings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
+        }
+
+        binding.btnPremium.setOnClickListener {
+            startActivity(Intent(this, PurchaseActivity::class.java))
+        }
+
+        if (AppSharedPref.getIsPurchased(this)) {
+            binding.btnPremium.visibility = View.GONE
         }
     }
 }

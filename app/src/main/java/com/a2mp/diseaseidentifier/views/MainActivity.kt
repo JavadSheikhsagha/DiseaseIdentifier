@@ -5,11 +5,13 @@ import android.content.Intent
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProvider
 import com.a2mp.diseaseidentifier.R
 import com.a2mp.diseaseidentifier.viewmodel.MainViewModel
 import com.a2mp.diseaseidentifier.databinding.ActivityMainBinding
+import com.a2mp.diseaseidentifier.repos.AppSharedPref
 import com.a2mp.diseaseidentifier.views.camera.Camera2Activity
 import kotlinx.coroutines.*
 
@@ -39,6 +41,14 @@ class MainActivity : AppCompatActivity() {
 
         binding.btnSettings.setOnClickListener {
             startActivity(Intent(this, SettingsActivity::class.java))
+        }
+
+        if (AppSharedPref.getIsPurchased(this)) {
+            binding.btnPremium.visibility = View.GONE
+        }
+
+        binding.btnPremium.setOnClickListener {
+            startActivity(Intent(this, PurchaseActivity::class.java))
         }
 
         implementMainAnimation()

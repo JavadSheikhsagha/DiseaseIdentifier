@@ -3,8 +3,10 @@ package com.a2mp.diseaseidentifier.views
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import com.a2mp.diseaseidentifier.databinding.ActivitySettingsBinding
+import com.a2mp.diseaseidentifier.repos.AppSharedPref
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -57,6 +59,9 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(Intent(this, PurchaseActivity::class.java))
         }
 
+        if (AppSharedPref.getIsPurchased(this)) {
+            binding.btnPurchase.visibility = View.GONE
+        }
 
     }
 }

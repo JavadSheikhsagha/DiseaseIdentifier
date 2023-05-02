@@ -7,11 +7,13 @@ import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.GridLayoutManager
 import com.a2mp.diseaseidentifier.R
 import com.a2mp.diseaseidentifier.databinding.ActivityPlantInfoBinding
 import com.a2mp.diseaseidentifier.models.DiseaseResponseModel
+import com.a2mp.diseaseidentifier.repos.AppSharedPref
 import com.a2mp.diseaseidentifier.viewmodel.MainViewModel
 import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
 import kotlinx.coroutines.*
@@ -72,6 +74,14 @@ class PlantInfoActivity : AppCompatActivity() {
         }
 
         binding.imgPlantInfoImage.setImageBitmap(imageBitmap)
+
+        if (AppSharedPref.getIsPurchased(this)) {
+            binding.btnPremium.visibility = View.GONE
+        }
+
+        binding.btnPremium.setOnClickListener {
+            startActivity(Intent(this, PurchaseActivity::class.java))
+        }
 
     }
 

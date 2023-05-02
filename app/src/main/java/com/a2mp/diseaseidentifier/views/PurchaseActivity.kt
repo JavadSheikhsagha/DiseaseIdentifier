@@ -22,6 +22,7 @@ class PurchaseActivity : AppCompatActivity() {
 
 
         setupViews()
+
     }
 
     private fun setupViews() {
@@ -52,6 +53,14 @@ class PurchaseActivity : AppCompatActivity() {
 
             val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
             startActivity(browserIntent)
+        }
+
+        binding.imgClose.setOnClickListener {
+            finish()
+        }
+
+        binding.btnFreeTrial.setOnClickListener {
+            finish()
         }
     }
 }

@@ -6,10 +6,12 @@ import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import com.a2mp.diseaseidentifier.R
 import com.a2mp.diseaseidentifier.databinding.ActivityPlantSingleBinding
 import com.a2mp.diseaseidentifier.models.DiseaseResponseModel
+import com.a2mp.diseaseidentifier.repos.AppSharedPref
 import com.a2mp.diseaseidentifier.viewmodel.MainViewModel
 import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
 import com.squareup.picasso.Picasso
@@ -74,6 +76,14 @@ class PlantSingleActivity : AppCompatActivity() {
         }
 
         implementAnimation(DISEASE_MODEL!!.healthAssessment!!.is_healthy!!)
+
+        if (AppSharedPref.getIsPurchased(this)) {
+            binding.btnPremium.visibility = View.GONE
+        }
+
+        binding.btnPremium.setOnClickListener {
+            startActivity(Intent(this, PurchaseActivity::class.java))
+        }
     }
 
 
