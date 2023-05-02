@@ -229,7 +229,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="FULL SUN"
+                    android:text="fetching..."
                     android:textColor="@color/textColorTitle" />
 
             </LinearLayout>
@@ -271,7 +271,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="FULL SUN"
+                    android:text="fetching..."
                     android:textColor="@color/textColorTitle" />
 
             </LinearLayout>
@@ -313,7 +313,7 @@
                     android:layout_marginTop="12dp"
                     android:layout_marginBottom="12dp"
                     android:fontFamily="@font/poppins_semibold"
-                    android:text="FULL SUN"
+                    android:text="fetching..."
                     android:textColor="@color/textColorTitle" />
 
             </LinearLayout>

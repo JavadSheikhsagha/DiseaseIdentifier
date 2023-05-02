@@ -56,7 +56,7 @@ object ApiClient {
 
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("http://a2mp.site/plant/")
+            .baseUrl("http://157.90.30.203/planttip/plant/")
             .client(client)
             .build()
             .create(ApiService::class.java)

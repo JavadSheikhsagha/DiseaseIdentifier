@@ -3,17 +3,17 @@ package com.a2mp.diseaseidentifier.views
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import com.a2mp.diseaseidentifier.R
 import com.a2mp.diseaseidentifier.databinding.ActivityPlantSingleBinding
 import com.a2mp.diseaseidentifier.models.DiseaseResponseModel
 import com.a2mp.diseaseidentifier.repos.AppSharedPref
 import com.a2mp.diseaseidentifier.viewmodel.MainViewModel
 import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
+import com.a2mp.diseaseidentifier.viewmodel.plant_name
 import com.squareup.picasso.Picasso
 import kotlinx.coroutines.*
 
@@ -35,7 +35,20 @@ class PlantSingleActivity : AppCompatActivity() {
 
         setupViews()
 
+        getPlantData()
+    }
 
+    private fun getPlantData() {
+
+        viewModel.getSinglePlant(plant_name.toString())
+
+        viewModel.getPlantDataLiveData.observe(this) {
+
+            binding.txtPlantLighting.text = if (it?.get(0)?.climate?.light == null) "Part Sun" else it.get(0).climate?.light?.capitalize()
+            binding.txtPlantWatering.text = if (it?.get(0)?.climate?.humidity == null) "50%" else it.get(0).climate?.humidity?.capitalize()
+            binding.txtPlantTempreture.text = if (it?.get(0)?.climate?.absolute_min_temp == null) "4" else it.get(0).climate?.absolute_min_temp?.capitalize()
+
+        }
     }
 
     private fun getDataOfHealth() {
@@ -53,7 +66,7 @@ class PlantSingleActivity : AppCompatActivity() {
         }
 
         binding.btnSeeDiseases.setOnClickListener {
-            val intent = Intent(this, PlantSingleActivity::class.java)
+            val intent = Intent(this, PlantInfoActivity::class.java)
             intent.putExtra("disease", DISEASE_MODEL)
             startActivity(intent)
         }
@@ -62,24 +75,32 @@ class PlantSingleActivity : AppCompatActivity() {
             startActivity(Intent(this, SettingsActivity::class.java))
         }
 
+        binding.btnTakesnap.setOnClickListener {
+            finish()
+        }
+
         DISEASE_MODEL?.let {
 
-            binding.txtAccuracy.text = ((it.healthAssessment?.is_healthy_probability?.times(100))?.toInt()).toString()
+            binding.txtAccuracy.text =
+                "${((it.healthAssessment?.is_healthy_probability?.times(100))?.toInt()).toString()}% Accuracy"
+
+            if (it.healthAssessment!!.is_healthy == false) {
+
+                binding.txtPlantCondition.text = "Your plant has a disease."
+                Picasso.get().load(R.drawable.imgunhealthy0).into(binding.imgPlantCondition)
+            } else {
+                binding.btnSeeDiseases.visibility = View.GONE
+            }
+
+            implementAnimation(DISEASE_MODEL!!.healthAssessment!!.is_healthy!!)
 
 
+            if (AppSharedPref.getIsPurchased(this)) {
+                binding.btnPremium.visibility = View.GONE
+            }
         }
 
-        if (DISEASE_MODEL!!.healthAssessment!!.is_healthy == false) {
 
-            binding.txtPlantCondition.text = "Your plant has a disease."
-            Picasso.get().load(R.drawable.imgunhealthy0).into(binding.imgPlantCondition)
-        }
-
-        implementAnimation(DISEASE_MODEL!!.healthAssessment!!.is_healthy!!)
-
-        if (AppSharedPref.getIsPurchased(this)) {
-            binding.btnPremium.visibility = View.GONE
-        }
 
         binding.btnPremium.setOnClickListener {
             startActivity(Intent(this, PurchaseActivity::class.java))

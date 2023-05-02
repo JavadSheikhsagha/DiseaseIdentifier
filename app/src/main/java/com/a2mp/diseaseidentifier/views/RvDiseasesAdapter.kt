@@ -9,7 +9,7 @@ import com.a2mp.diseaseidentifier.models.DiseaseModel
 import com.squareup.picasso.Picasso
 
 class RvDiseasesAdapter(
-    val list : List<DiseaseModel>
+    private val list : List<DiseaseModel>
 ) : RecyclerView.Adapter<RvDiseasesAdapter.RvDiseasesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RvDiseasesViewHolder {

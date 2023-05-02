@@ -68,22 +68,6 @@ class LoadingActivity : AppCompatActivity() {
 
     }
 
-    private fun getBitmapData() : Bitmap? {
-
-        val bmp: Bitmap?
-        val filename = intent.getStringExtra("image")
-        try {
-            val `is`: FileInputStream = openFileInput(filename)
-            bmp = BitmapFactory.decodeStream(`is`)
-            return  bmp
-
-            `is`.close()
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return null
-    }
-
     private fun setupViews() {
 
         startOuter()

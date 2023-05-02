@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import com.a2mp.diseaseidentifier.databinding.ActivityErrorBinding
 import com.a2mp.diseaseidentifier.repos.AppSharedPref
+import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
 import com.a2mp.diseaseidentifier.views.camera.Camera2Activity
 
 class ErrorActivity : AppCompatActivity() {
@@ -35,6 +36,8 @@ class ErrorActivity : AppCompatActivity() {
         binding.btnPremium.setOnClickListener {
             startActivity(Intent(this, PurchaseActivity::class.java))
         }
+
+        binding.imgPlantInfoImage.setImageBitmap(imageBitmap)
 
         if (AppSharedPref.getIsPurchased(this)) {
             binding.btnPremium.visibility = View.GONE

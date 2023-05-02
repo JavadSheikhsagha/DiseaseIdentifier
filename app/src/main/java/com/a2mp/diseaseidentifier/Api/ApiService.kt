@@ -2,6 +2,7 @@ package com.a2mp.diseaseidentifier.Api
 
 import com.a2mp.diseaseidentifier.models.DiseaseRequestModel
 import com.a2mp.diseaseidentifier.models.DiseaseResponseModel
+import com.a2mp.diseaseidentifier.models.GetPlantDataModel
 import com.a2mp.diseaseidentifier.models.IdentifyModel
 import okhttp3.MultipartBody
 import retrofit2.Call
@@ -22,7 +23,7 @@ interface ApiService {
     @GET("plants")
     fun getPlant(
         @Query("search") name: String
-    ): Call<String?>
+    ): Call<List<GetPlantDataModel>?>
 
 
     @POST("health_assessment")

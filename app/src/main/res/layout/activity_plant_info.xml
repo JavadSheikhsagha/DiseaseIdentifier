@@ -25,7 +25,6 @@
                 android:id="@+id/img_plantInfo_image"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
                 android:src="@drawable/img_plantsingle_healthy" />
 
         </androidx.cardview.widget.CardView>
@@ -85,7 +84,7 @@
             app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
         <androidx.recyclerview.widget.RecyclerView
-            android:nestedScrollingEnabled="true"
+            android:nestedScrollingEnabled="false"
             android:foregroundGravity="center"
             android:id="@+id/rv_diseases"
             android:layout_width="match_parent"
@@ -153,13 +152,14 @@
                             android:textSize="11sp" />
 
                         <TextView
+                            android:textSize="12sp"
                             android:id="@+id/txt_plantLighting"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             android:layout_marginBottom="12dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="FULL SUN"
+                            android:text="fetching..."
                             android:textColor="@color/textColorTitle" />
 
                     </LinearLayout>
@@ -191,18 +191,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="Watering"
+                            android:text="Humidity"
                             android:textColor="@color/textColorTitle"
                             android:textSize="11sp" />
 
                         <TextView
-                            android:id="@+id/txt_plantWatering"
+                            android:textSize="12sp"
+                            android:id="@+id/txt_plantHumidity"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             android:layout_marginBottom="12dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="FULL SUN"
+                            android:text="fetching..."
                             android:textColor="@color/textColorTitle" />
 
                     </LinearLayout>
@@ -234,18 +235,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="Temperature"
+                            android:text="Temp"
                             android:textColor="@color/textColorTitle"
                             android:textSize="11sp" />
 
                         <TextView
-                            android:id="@+id/txt_plantTempreture"
+                            android:textSize="12sp"
+                            android:id="@+id/txt_plantTemperature"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             android:layout_marginBottom="12dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="FULL SUN"
+                            android:text="fetching..."
                             android:textColor="@color/textColorTitle" />
 
                     </LinearLayout>
@@ -282,7 +284,7 @@
                             android:layout_width="28dp"
                             android:layout_height="28dp"
                             android:layout_margin="16dp"
-                            android:src="@drawable/icon_lighting" />
+                            android:src="@drawable/icon_isweed" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -293,13 +295,14 @@
                             android:textSize="11sp" />
 
                         <TextView
+                            android:textSize="12sp"
                             android:id="@+id/txt_plantIsWeed"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             android:layout_marginBottom="12dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="FULL SUN"
+                            android:text="fetching..."
                             android:textColor="@color/textColorTitle" />
 
                     </LinearLayout>
@@ -325,7 +328,7 @@
                             android:layout_width="28dp"
                             android:layout_height="28dp"
                             android:layout_margin="16dp"
-                            android:src="@drawable/icon_watering" />
+                            android:src="@drawable/icon_difficulty" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -336,13 +339,14 @@
                             android:textSize="11sp" />
 
                         <TextView
-                            android:id="@+id/txt_plantDificullaty"
+                            android:textSize="12sp"
+                            android:id="@+id/txt_plantDifficulty"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             android:layout_marginBottom="12dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="FULL SUN"
+                            android:text="fetching..."
                             android:textColor="@color/textColorTitle" />
 
                     </LinearLayout>
@@ -368,24 +372,25 @@
                             android:layout_width="28dp"
                             android:layout_height="28dp"
                             android:layout_margin="16dp"
-                            android:src="@drawable/icon_temp" />
+                            android:src="@drawable/poison" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="Watering"
+                            android:text="Toxicity"
                             android:textColor="@color/textColorTitle"
                             android:textSize="11sp" />
 
                         <TextView
-                            android:id="@+id/txt_plantNum"
+                            android:textSize="12sp"
+                            android:id="@+id/txt_plantToxic"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
                             android:layout_marginBottom="12dp"
                             android:fontFamily="@font/poppins_semibold"
-                            android:text="FULL SUN"
+                            android:text="fetching..."
                             android:textColor="@color/textColorTitle" />
 
                     </LinearLayout>

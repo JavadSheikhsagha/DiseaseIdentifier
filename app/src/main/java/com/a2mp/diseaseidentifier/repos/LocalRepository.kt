@@ -7,6 +7,7 @@ import android.util.Log
 import com.a2mp.diseaseidentifier.Api.ApiClient
 import com.a2mp.diseaseidentifier.models.DiseaseRequestModel
 import com.a2mp.diseaseidentifier.models.DiseaseResponseModel
+import com.a2mp.diseaseidentifier.models.GetPlantDataModel
 import com.a2mp.diseaseidentifier.models.IdentifyModel
 import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -81,7 +82,7 @@ class LocalRepository {
         ))
     }
 
-    fun getPlant(searchStr: String) : Call<String?> {
+    fun getPlant(searchStr: String) : Call<List<GetPlantDataModel>?> {
         return identifyService.getPlant(searchStr)
     }
 
