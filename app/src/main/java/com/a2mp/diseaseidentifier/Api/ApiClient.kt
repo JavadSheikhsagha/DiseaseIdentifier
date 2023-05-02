@@ -36,11 +36,10 @@ object ApiClient {
 
         val interceptor = HttpLoggingInterceptor()
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
-        val client = OkHttpClient.Builder().addInterceptor(MyInterceptor()).addInterceptor(interceptor).build()
+        val client =
+            OkHttpClient.Builder().addInterceptor(MyInterceptor()).addInterceptor(interceptor)
+                .build()
 
-        val list = listOf(
-            "C71wQQpmQIrFHzpJZq09Dj4bsjnXMX3dbVHJSBZsbti8nkInu3"
-        )
 
         return Retrofit.Builder()
             .addConverterFactory(GsonConverterFactory.create())
@@ -50,7 +49,7 @@ object ApiClient {
             .create(ApiService::class.java)
     }
 
-    fun getFindPlantByNameRetrofit() : ApiService {
+    fun getFindPlantByNameRetrofit(): ApiService {
         val interceptor = HttpLoggingInterceptor()
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY)
         val client = OkHttpClient.Builder().addInterceptor(interceptor).build()

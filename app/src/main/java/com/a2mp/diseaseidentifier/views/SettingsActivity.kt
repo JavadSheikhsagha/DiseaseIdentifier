@@ -44,16 +44,6 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(browserIntent)
         }
 
-        binding.constRateus.setOnClickListener {
-            val url = "https://play.google.com/store/apps/details?id=com.a2mp.diseaseidentifier"
-            if (!url.startsWith("http://") && !url.startsWith("https://")) {
-                "http://$url"
-            }
-
-            val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(url))
-            startActivity(browserIntent)
-        }
-
         binding.constContactus.setOnClickListener {
             val intent = Intent(Intent.ACTION_SEND)
             intent.type = "plain/text"

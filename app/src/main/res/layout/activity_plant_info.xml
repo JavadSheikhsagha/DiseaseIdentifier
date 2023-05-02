@@ -9,9 +9,9 @@
     tools:context=".views.PlantInfoActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:paddingBottom="24dp"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:paddingBottom="24dp">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView2"
@@ -31,22 +31,22 @@
         </androidx.cardview.widget.CardView>
 
         <ImageView
-            android:elevation="4dp"
             android:id="@+id/btn_back"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_margin="16dp"
+            android:elevation="4dp"
             android:padding="4dp"
             android:src="@drawable/icon_back"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
-            android:elevation="4dp"
             android:id="@+id/linearLayout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="16dp"
+            android:elevation="4dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -84,159 +84,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cardView2" />
 
-        <LinearLayout
-            android:id="@+id/linearLayout2"
+        <androidx.recyclerview.widget.RecyclerView
+            android:nestedScrollingEnabled="true"
+            android:foregroundGravity="center"
+            android:id="@+id/rv_diseases"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="24dp"
-            android:orientation="horizontal"
+            android:layout_marginHorizontal="20dp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3">
+            app:layout_constraintTop_toBottomOf="@+id/textView3" />
 
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:layout_weight="1"
-                app:cardCornerRadius="20dp">
-
-                <LinearLayout
-                    android:id="@+id/card_disease1"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/img_disease1"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:layout_marginTop="12dp"
-                        android:elevation="4dp"
-                        android:src="@drawable/img_plantsingle_unhealthy"
-                        app:civ_border_color="@color/white"
-                        app:civ_border_width="4dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-
-                    <TextView
-                        android:id="@+id/txt_disease1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="8dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="FULL SUN"
-                        android:textColor="@color/textColorTitle" />
-
-                    <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:layout_marginBottom="8dp"
-                        android:src="@drawable/icon_bottom_arrow" />
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:layout_weight="1"
-                app:cardCornerRadius="20dp">
-
-                <LinearLayout
-                    android:id="@+id/card_disease2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/img_disease2"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:layout_marginTop="12dp"
-                        android:elevation="4dp"
-                        android:src="@drawable/img_plantsingle_unhealthy"
-                        app:civ_border_color="@color/white"
-                        app:civ_border_width="4dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/txt_disease2"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="8dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="FULL SUN"
-                        android:textColor="@color/textColorTitle" />
-
-                    <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:layout_marginBottom="8dp"
-                        android:src="@drawable/icon_bottom_arrow" />
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="4dp"
-                android:layout_weight="1"
-                app:cardCornerRadius="20dp">
-
-                <LinearLayout
-                    android:id="@+id/card_disease3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:orientation="vertical">
-
-                    <de.hdodenhof.circleimageview.CircleImageView
-                        android:id="@+id/img_disease3"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
-                        android:layout_margin="8dp"
-                        android:layout_marginTop="12dp"
-                        android:elevation="4dp"
-                        android:src="@drawable/img_plantsingle_unhealthy"
-                        app:civ_border_color="@color/white"
-                        app:civ_border_width="4dp"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <TextView
-                        android:id="@+id/txt_disease3"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="12dp"
-                        android:layout_marginBottom="8dp"
-                        android:fontFamily="@font/poppins_semibold"
-                        android:text="FULL SUN"
-                        android:textColor="@color/textColorTitle" />
-
-                    <ImageView
-                        android:layout_width="12dp"
-                        android:layout_height="12dp"
-                        android:layout_marginBottom="8dp"
-                        android:src="@drawable/icon_bottom_arrow" />
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-        </LinearLayout>
 
         <TextView
             android:id="@+id/textView4"
@@ -249,7 +107,7 @@
             android:textColor="@color/accentColor"
             android:textSize="18sp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/rv_diseases" />
 
         <LinearLayout
             android:layout_width="match_parent"

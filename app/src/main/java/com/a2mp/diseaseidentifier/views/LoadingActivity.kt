@@ -47,7 +47,9 @@ class LoadingActivity : AppCompatActivity() {
                 viewModel.healthStatusForModel.observe(this) {
                     Log.i("LOG26", "onCreate: $it")
                     if (it?.images != null) {
-                        startActivity(Intent(this, PlantSingleActivity::class.java))
+                        val intent = Intent(this, PlantSingleActivity::class.java)
+                        intent.putExtra("disease", it)
+                        startActivity(intent)
                         finish()
                     } else {
                         Log.i("LOG28", "onCreate: ")
