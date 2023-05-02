@@ -5,12 +5,19 @@ import android.net.Uri
 import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
-import android.widget.TextView
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.a2mp.diseaseidentifier.databinding.ActivityPurchaseBinding
+import com.anjlab.android.iab.v3.BillingProcessor
+import com.anjlab.android.iab.v3.BillingProcessor.IPurchasesResponseListener
+import com.anjlab.android.iab.v3.BillingProcessor.ISkuDetailsResponseListener
+import com.anjlab.android.iab.v3.PurchaseInfo
+import com.anjlab.android.iab.v3.SkuDetails
 
 
-class PurchaseActivity : AppCompatActivity() {
+class PurchaseActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
+
+    var bp: BillingProcessor? = null
 
 
     private lateinit var binding: ActivityPurchaseBinding
@@ -21,9 +28,13 @@ class PurchaseActivity : AppCompatActivity() {
         setContentView(binding.root)
 
 
+        bp = BillingProcessor(this, "YOUR LICENSE KEY FROM GOOGLE PLAY CONSOLE HERE", this)
+        bp?.initialize()
+
         setupViews()
 
     }
+
 
     private fun setupViews() {
 
@@ -62,5 +73,87 @@ class PurchaseActivity : AppCompatActivity() {
         binding.btnFreeTrial.setOnClickListener {
             finish()
         }
+
+        binding.cardLifetime.setOnClickListener {
+
+        }
+
+        binding.cardWeekly.setOnClickListener {
+            bp?.subscribe(this, "YOUR SUBSCRIPTION ID FROM GOOGLE PLAY CONSOLE HERE");
+        }
+
+        binding.cardYearly.setOnClickListener {
+            bp?.subscribe(this, "YOUR SUBSCRIPTION ID FROM GOOGLE PLAY CONSOLE HERE");
+        }
+
+        binding.txtRestore.setOnClickListener {
+            bp?.loadOwnedPurchasesFromGoogleAsync(object : IPurchasesResponseListener {
+                override fun onPurchasesSuccess() {
+                    Log.i("LOG29", "onPurchasesSuccess: success restore")
+                }
+
+                override fun onPurchasesError() {
+                    Log.i("LOG29", "onPurchasesSuccess: error restore")
+                }
+            })
+        }
+
+        purchaseDetails()
+    }
+
+    private fun purchaseDetails() {
+
+        bp?.getPurchaseListingDetailsAsync("lifetime", object : ISkuDetailsResponseListener {
+            override fun onSkuDetailsResponse(products: MutableList<SkuDetails>?) {
+                binding.txtLifetimePrice.text = products?.get(0)?.priceText
+            }
+            override fun onSkuDetailsError(error: String?) {
+
+            }
+        })
+        bp?.getSubscriptionListingDetailsAsync("yearly", object : ISkuDetailsResponseListener {
+            override fun onSkuDetailsResponse(products: MutableList<SkuDetails>?) {
+                binding.txtYearlyPrice.text = products?.get(0)?.priceText
+            }
+            override fun onSkuDetailsError(error: String?) {
+
+            }
+        })
+        bp?.getSubscriptionListingDetailsAsync("weekly", object : ISkuDetailsResponseListener {
+            override fun onSkuDetailsResponse(products: MutableList<SkuDetails>?) {
+                binding.txtWeeklyPrice.text = products?.get(0)?.priceText
+            }
+            override fun onSkuDetailsError(error: String?) {
+
+            }
+        })
+    }
+
+    override fun onBillingInitialized() {
+        /*
+    * Called when BillingProcessor was initialized and it's ready to purchase
+    */
+    }
+
+    override fun onProductPurchased(productId: String, details: PurchaseInfo?) {
+
+    }
+
+    override fun onBillingError(errorCode: Int, error: Throwable?) {
+
+    }
+
+    override fun onPurchaseHistoryRestored() {
+        /*
+    * Called when purchase history was restored and the list of all owned PRODUCT ID's
+    * was loaded from Google Play
+    */
+    }
+
+    override fun onDestroy() {
+        if (bp != null) {
+            bp!!.release()
+        }
+        super.onDestroy()
     }
 }
