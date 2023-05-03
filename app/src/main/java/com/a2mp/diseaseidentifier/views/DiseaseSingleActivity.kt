@@ -9,6 +9,7 @@ import com.a2mp.diseaseidentifier.databinding.ActivityDiseaseSingleBinding
 import com.a2mp.diseaseidentifier.models.DiseaseModel
 import com.a2mp.diseaseidentifier.repos.AppSharedPref
 import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
+import com.squareup.picasso.Picasso
 
 class DiseaseSingleActivity : AppCompatActivity() {
 
@@ -75,7 +76,8 @@ class DiseaseSingleActivity : AppCompatActivity() {
             binding.txtBiological.text = getStringFromArray(DISEASE_MODEL?.disease_details?.treatment?.prevention)
         }
 
-        binding.imgPlantInfoImage.setImageBitmap(imageBitmap)
+//        binding.imgPlantInfoImage.setImageBitmap(imageBitmap)
+        Picasso.get().load(DISEASE_MODEL?.disease_details?.url).into(binding.imgPlantInfoImage)
 
     }
 
