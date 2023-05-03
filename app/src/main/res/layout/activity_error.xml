@@ -45,7 +45,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/btn_settings"
+            android:id="@+id/btn_premium"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:padding="4dp"
@@ -54,7 +54,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
-            android:id="@+id/btn_premium"
+            android:id="@+id/btn_settings"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:padding="4dp"
