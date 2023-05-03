@@ -9,7 +9,8 @@ import com.a2mp.diseaseidentifier.models.DiseaseModel
 import com.squareup.picasso.Picasso
 
 class RvDiseasesAdapter(
-    private val list : List<DiseaseModel>
+    private val list : List<DiseaseModel>,
+    private val onDiseaseClick: (DiseaseModel) -> Unit
 ) : RecyclerView.Adapter<RvDiseasesAdapter.RvDiseasesViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RvDiseasesViewHolder {
@@ -33,6 +34,10 @@ class RvDiseasesAdapter(
             Picasso.get().load(diseaseModel.similar_images?.get(0)?.url).into(binding.profileImage)
 
             binding.txtTitle.text = diseaseModel.name
+
+            binding.root.setOnClickListener {
+                onDiseaseClick(diseaseModel)
+            }
 
         }
     }

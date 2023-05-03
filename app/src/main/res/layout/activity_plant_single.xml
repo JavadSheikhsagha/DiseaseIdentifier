@@ -65,8 +65,8 @@
 
     <ImageView
         android:id="@+id/img_plantCondition"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_marginTop="16dp"
         android:src="@drawable/img_plantsingle_healthy"
         app:layout_constraintEnd_toEndOf="parent"

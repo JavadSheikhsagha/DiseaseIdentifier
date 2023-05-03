@@ -1,24 +1,18 @@
 package com.a2mp.diseaseidentifier.views
 
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.graphics.drawable.Drawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
-import com.a2mp.diseaseidentifier.R
 import com.a2mp.diseaseidentifier.databinding.ActivityPlantInfoBinding
 import com.a2mp.diseaseidentifier.models.DiseaseResponseModel
 import com.a2mp.diseaseidentifier.repos.AppSharedPref
 import com.a2mp.diseaseidentifier.viewmodel.MainViewModel
 import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
 import com.a2mp.diseaseidentifier.viewmodel.plant_name
-import com.squareup.picasso.Picasso
-import kotlinx.coroutines.*
 
 class PlantInfoActivity : AppCompatActivity() {
 
@@ -89,7 +83,15 @@ class PlantInfoActivity : AppCompatActivity() {
             } else {
                 GridLayoutManager(this@PlantInfoActivity, 1)
             }
-            adapter = RvDiseasesAdapter(DISEASE_MODEL!!.healthAssessment!!.diseases!!)
+            adapter = RvDiseasesAdapter(DISEASE_MODEL!!.healthAssessment!!.diseases!!) {
+                startActivity(
+                    Intent(
+                        this@PlantInfoActivity,
+                        DiseaseSingleActivity::class.java
+                    ).apply {
+                        putExtra("disease", it)
+                    })
+            }
         }
 
         binding.imgPlantInfoImage.setImageBitmap(imageBitmap)

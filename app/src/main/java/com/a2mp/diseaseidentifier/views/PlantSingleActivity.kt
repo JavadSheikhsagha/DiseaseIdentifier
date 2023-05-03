@@ -97,7 +97,7 @@ class PlantSingleActivity : AppCompatActivity() {
                 binding.btnSeeDiseases.visibility = View.GONE
             }
 
-            implementAnimation(DISEASE_MODEL!!.healthAssessment!!.is_healthy!!)
+//            implementAnimation(DISEASE_MODEL!!.healthAssessment!!.is_healthy!!)
 
 
             if (AppSharedPref.getIsPurchased(this)) {

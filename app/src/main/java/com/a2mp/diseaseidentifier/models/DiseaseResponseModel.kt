@@ -41,10 +41,13 @@ data class DiseaseDetailsModel(
     val local_name: String?,
     val description: String?,
     val url: String?,
-    val treatment: TreatmentModel?
+    val treatment: TreatmentModel?,
 ) : Parcelable
 
 @Parcelize
 data class TreatmentModel(
-    val biological: List<String>?, val prevention: List<String>?, val classification: List<String>?
+    val biological: List<String>?,
+    val prevention: List<String>?,
+    val classification: List<String>?,
+    val chemical : List<String>?,
 ) : Parcelable

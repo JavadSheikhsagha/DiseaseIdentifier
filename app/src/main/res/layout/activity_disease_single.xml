@@ -23,7 +23,7 @@
             <ImageView
                 android:id="@+id/img_plantInfo_image"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:scaleType="centerCrop"
                 android:src="@drawable/img_plantsingle_healthy" />
 
@@ -148,6 +148,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
+                android:layout_marginHorizontal="16dp"
                 android:fontFamily="@font/poppins_regular"
                 android:text="Abiotic diseases are the result
 of the interaction, over an extended
@@ -184,6 +185,7 @@ or the presence of extremes moisture,
             </LinearLayout>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/card_biological"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="4dp"
@@ -251,6 +253,7 @@ or the presence of extremes moisture,
                 app:cardCornerRadius="20dp">
 
                 <LinearLayout
+                    android:id="@+id/card_chemical"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
@@ -304,6 +307,7 @@ or the presence of extremes moisture,
             </androidx.cardview.widget.CardView>
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/card_prevention"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="4dp"
