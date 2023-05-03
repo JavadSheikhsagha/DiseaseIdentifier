@@ -18,6 +18,8 @@ class SettingsActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         setupViews()
+
+
     }
 
     private fun setupViews() {

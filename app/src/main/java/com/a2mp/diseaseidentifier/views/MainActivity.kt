@@ -3,15 +3,14 @@ package com.a2mp.diseaseidentifier.views
 import android.content.Context
 import android.content.Intent
 import android.graphics.BitmapFactory
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import com.a2mp.diseaseidentifier.R
-import com.a2mp.diseaseidentifier.viewmodel.MainViewModel
 import com.a2mp.diseaseidentifier.databinding.ActivityMainBinding
 import com.a2mp.diseaseidentifier.repos.AppSharedPref
+import com.a2mp.diseaseidentifier.viewmodel.MainViewModel
 import com.a2mp.diseaseidentifier.views.camera.Camera2Activity
 import kotlinx.coroutines.*
 
@@ -51,7 +50,7 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, PurchaseActivity::class.java))
         }
 
-        implementMainAnimation()
+//        implementMainAnimation()
     }
 
     private fun implementMainAnimation() {
