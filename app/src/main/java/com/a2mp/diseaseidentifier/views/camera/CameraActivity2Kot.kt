@@ -8,9 +8,7 @@ import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
 import android.hardware.camera2.*
 import android.hardware.camera2.CameraCaptureSession.CaptureCallback
-import android.media.Image
 import android.media.ImageReader
-import android.media.ImageReader.OnImageAvailableListener
 import android.os.Bundle
 import android.os.Environment
 import android.os.Handler
@@ -25,18 +23,17 @@ import android.view.TextureView.SurfaceTextureListener
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.a2mp.diseaseidentifier.R
-import com.a2mp.diseaseidentifier.viewmodel.MainViewModel
 import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
 import com.a2mp.diseaseidentifier.views.LoadingActivity
 import com.permissionx.guolindev.PermissionX
 import java.io.*
 import java.util.*
 
-class Camera2Activity : AppCompatActivity() {
+
+open class Camera2Activity : AppCompatActivity() {
     private var takePictureButton: ImageView? = null
     private var textureView: TextureView? = null
     private var cameraId: String? = null
@@ -51,8 +48,6 @@ class Camera2Activity : AppCompatActivity() {
     private var mBackgroundHandler: Handler? = null
     private var mBackgroundThread: HandlerThread? = null
     private var imgGallery: ImageView? = null
-
-    private val viewModel by viewModels<MainViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -186,7 +181,7 @@ class Camera2Activity : AppCompatActivity() {
         }
     }
 
-    protected fun takePicture() {
+    private fun takePicture() {
         if (null == cameraDevice) {
             Log.e(TAG, "cameraDevice is null")
             return
@@ -225,40 +220,7 @@ class Camera2Activity : AppCompatActivity() {
             val file = File(Environment.getExternalStorageDirectory().toString() + "/pic.jpg")
             file.mkdirs()
             file.mkdir()
-            val readerListener: OnImageAvailableListener = object : OnImageAvailableListener {
-                override fun onImageAvailable(reader: ImageReader) {
-                    var image: Image? = null
-                    try {
-                        image = reader.acquireLatestImage()
-                        val buffer = image.planes[0].buffer
-                        val bytes = ByteArray(buffer.capacity())
-                        buffer[bytes]
-                        save(bytes)
-                        val options = BitmapFactory.Options()
-                        options.inMutable = true
-                        val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size, options)
-                        imgGallery!!.setImageBitmap(bmp)
-                    } catch (e: FileNotFoundException) {
-                        e.printStackTrace()
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    } finally {
-                        image?.close()
-                    }
-                }
 
-                @Throws(IOException::class)
-                private fun save(bytes: ByteArray) {
-                    var output: OutputStream? = null
-                    try {
-                        output = FileOutputStream(file)
-                        output.write(bytes)
-                    } finally {
-                        output?.close()
-                    }
-                }
-            }
-            reader.setOnImageAvailableListener(readerListener, mBackgroundHandler)
             val captureListener: CaptureCallback = object : CaptureCallback() {
                 override fun onCaptureCompleted(
                     session: CameraCaptureSession,
@@ -266,14 +228,17 @@ class Camera2Activity : AppCompatActivity() {
                     result: TotalCaptureResult
                 ) {
                     super.onCaptureCompleted(session, request, result)
+
                     Log.i(TAG, "onImageAvailable: saveddddd")
-                    Toast.makeText(this@Camera2Activity, "Saved:$file", Toast.LENGTH_SHORT).show()
-                    val bitmap = BitmapFactory.decodeFile(file.path)
+//                    Toast.makeText(this@Camera2Activity, "Saved:$file", Toast.LENGTH_SHORT).show()
+//                    val bitmap = BitmapFactory.decodeFile(file.path)
                     Thread {
                         //run code on background thread
                         runOnUiThread {
                             //update the UI on main thread
-                            imgGallery!!.setImageBitmap(bitmap)
+                            imageBitmap = textureView?.bitmap
+
+                            startActivity(Intent(this@Camera2Activity, LoadingActivity::class.java))
                         }
                     }.start()
                     createCameraPreview()
@@ -301,6 +266,7 @@ class Camera2Activity : AppCompatActivity() {
         } catch (e: CameraAccessException) {
             e.printStackTrace()
         }
+
     }
 
     protected fun createCameraPreview() {
