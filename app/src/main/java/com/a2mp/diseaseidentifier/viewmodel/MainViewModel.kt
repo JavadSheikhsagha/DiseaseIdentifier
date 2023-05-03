@@ -24,7 +24,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val repository = LocalRepository()
 
-    val identifyModel : MutableLiveData<PlantNetIdentifyPlantModel?> = MutableLiveData()
+    val identifyModel : MutableLiveData<IdentifyModel?> = MutableLiveData()
     val healthStatusForModel: MutableLiveData<DiseaseResponseModel?> = MutableLiveData()
     val getPlantDataLiveData: MutableLiveData<List<GetPlantDataModel>?> = MutableLiveData()
 
@@ -39,13 +39,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                         Log.i("LOG23", "onResponse: DID GET identify")
 
                         response.body()?.let {
-                            val plantNetModel = PlantNetIdentifyPlantModel(
-                                name = it.bestMatch,
-                                commonNames = it.bestMatch
-                            )
+
                             plant_name = it.bestMatch
                             Log.i("LOG800", "onResponse: ${it.bestMatch}")
-                            identifyModel.postValue(plantNetModel)
+                            identifyModel.postValue(it)
                         }
                         getHealthStatusDirectFor()
                     }

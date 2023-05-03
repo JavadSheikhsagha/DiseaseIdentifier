@@ -1,5 +1,6 @@
 package com.a2mp.diseaseidentifier.views
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
@@ -44,9 +45,9 @@ class PlantSingleActivity : AppCompatActivity() {
 
         viewModel.getPlantDataLiveData.observe(this) {
 
-            binding.txtPlantLighting.text = if (it?.get(0)?.climate?.light == null) "Part Sun" else it.get(0).climate?.light?.capitalize()
-            binding.txtPlantWatering.text = if (it?.get(0)?.climate?.humidity == null) "50%" else it.get(0).climate?.humidity?.capitalize()
-            binding.txtPlantTempreture.text = if (it?.get(0)?.climate?.absolute_min_temp == null) "4" else it.get(0).climate?.absolute_min_temp?.capitalize()
+            binding.txtPlantLighting.text = if (it?.get(0)?.climate?.light == null) "Part Sun" else it[0].climate?.light?.capitalize()
+            binding.txtPlantWatering.text = if (it?.get(0)?.climate?.humidity == null) "50%" else it[0].climate?.humidity?.capitalize()
+            binding.txtPlantTempreture.text = if (it?.get(0)?.climate?.absolute_min_temp == null) "4" else it[0].climate?.absolute_min_temp?.capitalize()
 
         }
     }
@@ -55,8 +56,12 @@ class PlantSingleActivity : AppCompatActivity() {
 
         DISEASE_MODEL = intent.extras?.getParcelable("disease")
 
+        binding.txtPlantCommonName.text = intent.extras?.getString("plant_name")
+        binding.txtPlantName.text = plant_name
+
     }
 
+    @SuppressLint("SetTextI18n")
     private fun setupViews() {
 
         binding.profileImage.setImageBitmap(imageBitmap)
@@ -82,7 +87,7 @@ class PlantSingleActivity : AppCompatActivity() {
         DISEASE_MODEL?.let {
 
             binding.txtAccuracy.text =
-                "${((it.healthAssessment?.is_healthy_probability?.times(100))?.toInt()).toString()}% Accuracy"
+                "${((it.is_plant_probability?.times(100))?.toInt()).toString()}% Accuracy"
 
             if (it.healthAssessment!!.is_healthy == false) {
 

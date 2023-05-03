@@ -41,14 +41,15 @@ class LoadingActivity : AppCompatActivity() {
         }
 
 
-        viewModel.identifyModel.observe(this,) {
+        viewModel.identifyModel.observe(this,) { identify ->
 
-            if (it?.name!= null) {
+            if (identify?.bestMatch != null) {
                 viewModel.healthStatusForModel.observe(this) {
                     Log.i("LOG26", "onCreate: $it")
                     if (it?.images != null) {
                         val intent = Intent(this, PlantSingleActivity::class.java)
                         intent.putExtra("disease", it)
+                        intent.putExtra("plant_name", getSingleStringFromCommonNames(identify.results[0].species!!.commonNames))
                         startActivity(intent)
                         finish()
                     } else {
@@ -66,6 +67,16 @@ class LoadingActivity : AppCompatActivity() {
 
 
 
+    }
+
+    private fun getSingleStringFromCommonNames(commonNames: List<String>): String? {
+
+        var finalCommonNames = ""
+
+        commonNames.forEach {
+            finalCommonNames += "$it, "
+        }
+        return finalCommonNames
     }
 
     private fun setupViews() {

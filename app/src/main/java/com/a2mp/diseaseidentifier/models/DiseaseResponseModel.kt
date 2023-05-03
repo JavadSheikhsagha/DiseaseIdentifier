@@ -7,6 +7,7 @@ import kotlinx.parcelize.Parcelize
 @Parcelize
 class DiseaseResponseModel(
     val images: List<ImageModel>?,
+    val is_plant_probability : Float,
     @SerializedName("health_assessment") val healthAssessment: HealthAssessmentModel?,
 ) : Parcelable
 
