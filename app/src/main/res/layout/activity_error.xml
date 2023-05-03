@@ -36,6 +36,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
+        android:visibility="gone"
         android:elevation="4dp"
         android:id="@+id/linearLayout"
         android:layout_width="wrap_content"

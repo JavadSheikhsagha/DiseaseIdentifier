@@ -10,8 +10,8 @@
 
     <ImageView
         android:id="@+id/btn_back"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
         android:layout_margin="16dp"
         android:padding="4dp"
         android:src="@drawable/icon_back"
@@ -28,21 +28,13 @@
 
         <ImageView
             android:id="@+id/btn_premium"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="54dp"
+            android:layout_height="54dp"
             android:padding="4dp"
             android:src="@drawable/icon_premium"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <ImageView
-            android:id="@+id/btn_settings"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:padding="4dp"
-            android:src="@drawable/icon_settings"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
     </LinearLayout>
 
@@ -140,6 +132,7 @@
                             app:layout_constraintTop_toBottomOf="@+id/textView" />
 
                         <TextView
+                            android:layout_marginTop="12dp"
                             android:id="@+id/textView2"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -260,18 +253,18 @@
                             android:layout_width="28dp"
                             android:layout_height="28dp"
                             android:layout_margin="16dp"
-                            android:src="@drawable/icon_watering" />
+                            android:src="@drawable/icon_difficulty" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:fontFamily="@font/poppins_regular"
-                            android:text="Watering"
+                            android:text="Difficulty"
                             android:textColor="@color/textColorTitle"
                             android:textSize="11sp" />
 
                         <TextView
-                            android:id="@+id/txt_plantWatering"
+                            android:id="@+id/txt_plantDifficulty"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
@@ -337,7 +330,7 @@
                 android:backgroundTint="@color/btnColor"
                 android:fontFamily="@font/poppins_regular"
                 android:gravity="center"
-                android:text="See The Diseases"
+                android:text="See The Treatment"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
                 android:textSize="15sp"
