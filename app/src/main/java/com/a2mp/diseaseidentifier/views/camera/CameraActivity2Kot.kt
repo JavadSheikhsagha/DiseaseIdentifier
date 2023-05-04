@@ -1,8 +1,10 @@
 package com.a2mp.diseaseidentifier.views.camera
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
 import android.graphics.SurfaceTexture
@@ -29,7 +31,7 @@ import com.a2mp.diseaseidentifier.R
 import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
 import com.a2mp.diseaseidentifier.views.LoadingActivity
 import com.permissionx.guolindev.PermissionX
-import java.io.*
+import java.io.File
 import java.util.*
 
 
@@ -84,7 +86,59 @@ open class Camera2Activity : AppCompatActivity() {
         })
         assert(takePictureButton != null)
         takePictureButton!!.setOnClickListener { takePicture() }
+
+        getUserLastImage()
+
+        turnFlashLightOnAndOff()
+
     }
+
+    private var isFlashOn = false
+
+    private fun turnFlashLightOnAndOff() {
+
+        findViewById<ImageView>(R.id.icon_flash).setOnClickListener(View.OnClickListener {
+
+            if (isFlashOn) {
+                cameraCaptureSessions?.stopRepeating()
+                captureRequestBuilder?.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_OFF)
+                cameraCaptureSessions?.setRepeatingRequest(captureRequestBuilder!!.build(), null, null)
+                isFlashOn = false
+            } else {
+                cameraCaptureSessions?.stopRepeating()
+                captureRequestBuilder?.set(CaptureRequest.FLASH_MODE, CaptureRequest.FLASH_MODE_TORCH)
+                cameraCaptureSessions?.setRepeatingRequest(captureRequestBuilder!!.build(), null, null)
+                isFlashOn = true
+            }
+
+
+        })
+    }
+
+
+    private fun getUserLastImage() {
+        val projection = arrayOf(
+            MediaStore.Images.ImageColumns._ID,
+            MediaStore.Images.ImageColumns.DATA,
+            MediaStore.Images.ImageColumns.BUCKET_DISPLAY_NAME,
+            MediaStore.Images.ImageColumns.DATE_TAKEN,
+            MediaStore.Images.ImageColumns.MIME_TYPE
+        )
+        val cursor: Cursor = applicationContext.getContentResolver()
+            .query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI, projection, null,
+                null, MediaStore.Images.ImageColumns.DATE_TAKEN + " DESC"
+            )!!
+        if (cursor.moveToFirst()) {
+            val imageLocation: String = cursor.getString(1)
+            val imageFile = File(imageLocation)
+            if (imageFile.exists()) {
+                val bm = BitmapFactory.decodeFile(imageLocation)
+                imgGallery?.setImageBitmap(bm)
+            }
+        }
+    }
+
 
     private val permissions: Unit
         private get() {
@@ -308,7 +362,10 @@ open class Camera2Activity : AppCompatActivity() {
 
     private fun openCamera() {
         val manager = getSystemService(CAMERA_SERVICE) as CameraManager
-        Log.e(TAG, "is camera open")
+
+
+        turnFlashLightOnAndOff()
+
         try {
             cameraId = manager.cameraIdList[0]
             val characteristics = manager.getCameraCharacteristics(cameraId!!)
