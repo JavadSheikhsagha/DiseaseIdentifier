@@ -1,24 +1,27 @@
 package com.a2mp.diseaseidentifier.views
 
-import android.R.attr.bitmap
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.a2mp.diseaseidentifier.databinding.ActivityLoadingBinding
+import com.a2mp.diseaseidentifier.models.DiseaseResponseModel
+import com.a2mp.diseaseidentifier.models.IdentifyModel
 import com.a2mp.diseaseidentifier.viewmodel.MainViewModel
 import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-import java.io.*
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.LoadAdError
+import com.google.android.gms.ads.OnUserEarnedRewardListener
+import com.google.android.gms.ads.rewarded.RewardedAd
+import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 
 
 class LoadingActivity : AppCompatActivity() {
+
+    private var rewardedAd: RewardedAd? = null
+    private var isCanceled = false
 
     private lateinit var binding: ActivityLoadingBinding
 
@@ -32,6 +35,9 @@ class LoadingActivity : AppCompatActivity() {
 
         setupViews()
 
+        loadRewardedAd() {
+
+        }
 
         imageBitmap?.let {
             Log.i("LOG25", "onCreate: isnt null")
@@ -41,32 +47,97 @@ class LoadingActivity : AppCompatActivity() {
         }
 
 
-        viewModel.identifyModel.observe(this,) { identify ->
+        getHealthForPlant { plantName, disease ->
+            rewardedAd?.let { ad ->
+                ad.show(this) { rewardItem ->
+                    Log.d("LOG35", "User earned the reward.")
+                    Log.i("LOG26", "onCreate: $disease")
+                    if (disease?.images != null) {
 
-            if (identify?.bestMatch != null) {
-                viewModel.healthStatusForModel.observe(this) {
-                    Log.i("LOG26", "onCreate: $it")
-                    if (it?.images != null) {
                         val intent = Intent(this, PlantSingleActivity::class.java)
-                        intent.putExtra("disease", it)
-                        intent.putExtra("plant_name", getSingleStringFromCommonNames(identify.results[0].species!!.commonNames))
-                        startActivity(intent)
-                        finish()
+                        intent.putExtra("disease", disease)
+                        intent.putExtra(
+                            "plant_name",
+                            getSingleStringFromCommonNames(plantName.results[0].species!!.commonNames)
+                        )
+                        if (!isCanceled) {
+                            startActivity(intent)
+                            finish()
+                        }
+
+
                     } else {
                         Log.i("LOG28", "onCreate: ")
+                        if (!isCanceled) {
+                            startActivity(Intent(this, ErrorActivity::class.java))
+                            finish()
+                        }
+
+                    }
+                }
+            } ?: run {
+                Log.d("LOG35", "The rewarded ad wasn't ready yet.")
+                if (disease?.images != null) {
+
+                    val intent = Intent(this, PlantSingleActivity::class.java)
+                    intent.putExtra("disease", disease)
+                    intent.putExtra(
+                        "plant_name",
+                        getSingleStringFromCommonNames(plantName.results[0].species!!.commonNames)
+                    )
+                    if (!isCanceled) {
+                        startActivity(intent)
+                        finish()
+                    }
+
+
+                } else {
+                    Log.i("LOG28", "onCreate: ")
+                    if (!isCanceled) {
                         startActivity(Intent(this, ErrorActivity::class.java))
                         finish()
                     }
+
                 }
-            } else {
-                Log.i("LOG27", "onCreate: ")
-                startActivity(Intent(this, ErrorActivity::class.java))
-                finish()
             }
+
         }
 
 
+    }
 
+    private fun getHealthForPlant(function: (plantName:IdentifyModel, disease:DiseaseResponseModel?) -> Unit) {
+
+        viewModel.identifyModel.observe(this,) { identify ->
+
+
+            if (identify?.bestMatch != null) {
+                viewModel.healthStatusForModel.observe(this) {
+                    function(identify, it)
+                }
+            } else {
+                Log.i("LOG27", "onCreate: ")
+                if (!isCanceled)
+                    startActivity(Intent(this, ErrorActivity::class.java))
+                finish()
+            }
+        }
+    }
+
+    private fun loadRewardedAd(function: () -> Unit) {
+
+        var adRequest = AdRequest.Builder().build()
+        RewardedAd.load(this,"ca-app-pub-3940256099942544/5224354917", adRequest, object : RewardedAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                Log.d("LOG34", adError.toString())
+                rewardedAd = null
+            }
+
+            override fun onAdLoaded(ad: RewardedAd) {
+                Log.d("LOG34", "Ad was loaded.")
+                rewardedAd = ad
+            }
+        })
     }
 
     private fun getSingleStringFromCommonNames(commonNames: List<String>): String? {
@@ -80,6 +151,11 @@ class LoadingActivity : AppCompatActivity() {
     }
 
     private fun setupViews() {
+
+        binding.cancelButton.setOnClickListener {
+            isCanceled = true
+            finish()
+        }
 
         startOuter()
         startInner()

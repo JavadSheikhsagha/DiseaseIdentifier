@@ -76,7 +76,7 @@ class DiseaseSingleActivity : AppCompatActivity() {
             binding.txtBiological.text = getStringFromArray(DISEASE_MODEL?.disease_details?.treatment?.prevention)
         }
 
-//        binding.imgPlantInfoImage.setImageBitmap(imageBitmap)
+
         Picasso.get().load(DISEASE_MODEL?.disease_details?.url).into(binding.imgPlantInfoImage)
 
     }

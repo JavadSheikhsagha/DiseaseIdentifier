@@ -12,6 +12,8 @@ import com.a2mp.diseaseidentifier.databinding.ActivityMainBinding
 import com.a2mp.diseaseidentifier.repos.AppSharedPref
 import com.a2mp.diseaseidentifier.viewmodel.MainViewModel
 import com.a2mp.diseaseidentifier.views.camera.Camera2Activity
+import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.MobileAds
 import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity() {
@@ -24,12 +26,22 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        MobileAds.initialize(this) {}
+
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         isFirstTime()
 
 
         setupViews()
 
+        loadAd()
+
+    }
+
+    private fun loadAd() {
+
+        val adRequest = AdRequest.Builder().build()
+        binding.adView.loadAd(adRequest)
     }
 
     private fun setupViews() {
