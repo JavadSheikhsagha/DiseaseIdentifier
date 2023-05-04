@@ -12,8 +12,8 @@ import com.a2mp.diseaseidentifier.models.IdentifyModel
 import com.a2mp.diseaseidentifier.viewmodel.MainViewModel
 import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
 import com.google.android.gms.ads.AdRequest
+import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.OnUserEarnedRewardListener
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 
@@ -52,28 +52,7 @@ class LoadingActivity : AppCompatActivity() {
                 ad.show(this) { rewardItem ->
                     Log.d("LOG35", "User earned the reward.")
                     Log.i("LOG26", "onCreate: $disease")
-                    if (disease?.images != null) {
-
-                        val intent = Intent(this, PlantSingleActivity::class.java)
-                        intent.putExtra("disease", disease)
-                        intent.putExtra(
-                            "plant_name",
-                            getSingleStringFromCommonNames(plantName.results[0].species!!.commonNames)
-                        )
-                        if (!isCanceled) {
-                            startActivity(intent)
-                            finish()
-                        }
-
-
-                    } else {
-                        Log.i("LOG28", "onCreate: ")
-                        if (!isCanceled) {
-                            startActivity(Intent(this, ErrorActivity::class.java))
-                            finish()
-                        }
-
-                    }
+                    adCallback(plantName, disease)
                 }
             } ?: run {
                 Log.d("LOG35", "The rewarded ad wasn't ready yet.")
@@ -104,6 +83,54 @@ class LoadingActivity : AppCompatActivity() {
         }
 
 
+    }
+
+    private fun adCallback(plantName: IdentifyModel, disease: DiseaseResponseModel?) {
+
+        rewardedAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
+            override fun onAdClicked() {
+                // Called when a click is recorded for an ad.
+                Log.d("LOG37", "Ad was clicked.")
+            }
+
+            override fun onAdDismissedFullScreenContent() {
+                // Called when ad is dismissed.
+                Log.d("LOG37", "Ad dismissed fullscreen content.")
+                if (disease?.images != null) {
+
+                    val intent = Intent(this@LoadingActivity, PlantSingleActivity::class.java)
+                    intent.putExtra("disease", disease)
+                    intent.putExtra(
+                        "plant_name",
+                        getSingleStringFromCommonNames(plantName.results[0].species!!.commonNames)
+                    )
+                    if (!isCanceled) {
+                        startActivity(intent)
+                        finish()
+                    }
+
+
+                } else {
+                    Log.i("LOG28", "onCreate: ")
+                    if (!isCanceled) {
+                        startActivity(Intent(this@LoadingActivity, ErrorActivity::class.java))
+                        finish()
+                    }
+
+                }
+                rewardedAd = null
+            }
+
+            override fun onAdImpression() {
+                // Called when an impression is recorded for an ad.
+                Log.d("LOG37", "Ad recorded an impression.")
+            }
+
+            override fun onAdShowedFullScreenContent() {
+                // Called when ad is shown.
+                Log.d("LOG37", "Ad showed fullscreen content.")
+            }
+        }
     }
 
     private fun getHealthForPlant(function: (plantName:IdentifyModel, disease:DiseaseResponseModel?) -> Unit) {
