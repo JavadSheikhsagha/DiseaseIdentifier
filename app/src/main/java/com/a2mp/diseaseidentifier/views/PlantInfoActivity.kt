@@ -99,14 +99,19 @@ class PlantInfoActivity : AppCompatActivity() {
             Log.i("LOG31", "setupViews: its null")
         }
 
-        if (AppSharedPref.getIsPurchased(this)) {
-            binding.btnPremium.visibility = View.GONE
-        }
+
 
         binding.btnPremium.setOnClickListener {
             startActivity(Intent(this, PurchaseActivity::class.java))
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (AppSharedPref.getIsPurchased(this)) {
+            binding.btnPremium.visibility = View.GONE
+        }
     }
 
 

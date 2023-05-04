@@ -364,25 +364,6 @@ open class Camera2Activity : AppCompatActivity() {
         }
     }
 
-    override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<String>,
-        grantResults: IntArray
-    ) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == REQUEST_CAMERA_PERMISSION) {
-            if (grantResults[0] == PackageManager.PERMISSION_DENIED) {
-                // close the app
-                Toast.makeText(
-                    this@Camera2Activity,
-                    "Sorry!!!, you can't use this app without granting permission",
-                    Toast.LENGTH_LONG
-                ).show()
-                finish()
-            }
-        }
-    }
-
     override fun onResume() {
         super.onResume()
         Log.e(TAG, "onResume")

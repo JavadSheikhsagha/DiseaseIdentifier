@@ -8,6 +8,7 @@ import android.text.style.UnderlineSpan
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.a2mp.diseaseidentifier.databinding.ActivityPurchaseBinding
+import com.a2mp.diseaseidentifier.repos.AppSharedPref
 import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.BillingProcessor.IPurchasesResponseListener
 import com.anjlab.android.iab.v3.BillingProcessor.ISkuDetailsResponseListener
@@ -75,7 +76,7 @@ class PurchaseActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
         }
 
         binding.cardLifetime.setOnClickListener {
-
+            bp?.purchase(this, "YOUR SUBSCRIPTION ID FROM GOOGLE PLAY CONSOLE HERE");
         }
 
         binding.cardWeekly.setOnClickListener {
@@ -87,6 +88,9 @@ class PurchaseActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
         }
 
         binding.txtRestore.setOnClickListener {
+            AppSharedPref.setIsPurchased(this@PurchaseActivity,true)
+
+            finish()
             bp?.loadOwnedPurchasesFromGoogleAsync(object : IPurchasesResponseListener {
                 override fun onPurchasesSuccess() {
                     Log.i("LOG29", "onPurchasesSuccess: success restore")

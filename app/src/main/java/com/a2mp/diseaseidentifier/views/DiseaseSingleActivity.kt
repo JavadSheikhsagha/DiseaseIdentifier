@@ -77,7 +77,7 @@ class DiseaseSingleActivity : AppCompatActivity() {
         }
 
 
-        Picasso.get().load(DISEASE_MODEL?.disease_details?.url).into(binding.imgPlantInfoImage)
+        Picasso.get().load(DISEASE_MODEL?.similar_images?.get(0)?.url).into(binding.imgPlantInfoImage)
 
     }
 

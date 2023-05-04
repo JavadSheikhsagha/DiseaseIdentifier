@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.a2mp.diseaseidentifier.databinding.ActivityLoadingBinding
 import com.a2mp.diseaseidentifier.models.DiseaseResponseModel
 import com.a2mp.diseaseidentifier.models.IdentifyModel
+import com.a2mp.diseaseidentifier.repos.AppSharedPref
 import com.a2mp.diseaseidentifier.viewmodel.MainViewModel
 import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
 import com.google.android.gms.ads.AdRequest
@@ -35,8 +36,10 @@ class LoadingActivity : AppCompatActivity() {
 
         setupViews()
 
-        loadRewardedAd() {
+        if (!AppSharedPref.getIsPurchased(this)) {
+            loadRewardedAd {
 
+            }
         }
 
         imageBitmap?.let {

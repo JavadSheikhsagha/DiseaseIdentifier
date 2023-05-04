@@ -34,7 +34,9 @@ class MainActivity : AppCompatActivity() {
 
         setupViews()
 
-        loadAd()
+        if (!AppSharedPref.getIsPurchased(this)) {
+            loadAd()
+        }
 
     }
 
@@ -129,6 +131,13 @@ class MainActivity : AppCompatActivity() {
             .edit()
             .putBoolean("isFirstTime", false)
             .apply()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (AppSharedPref.getIsPurchased(this)) {
+            binding.btnPremium.visibility = View.GONE
+        }
     }
 
 

@@ -62,8 +62,17 @@ class SettingsActivity : AppCompatActivity() {
         }
 
         if (AppSharedPref.getIsPurchased(this)) {
+            binding.txtPremiumTxt.visibility = View.GONE
             binding.btnPurchase.visibility = View.GONE
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (AppSharedPref.getIsPurchased(this)) {
+            binding.txtPremiumTxt.visibility = View.GONE
+            binding.btnPurchase.visibility = View.GONE
+        }
     }
 }

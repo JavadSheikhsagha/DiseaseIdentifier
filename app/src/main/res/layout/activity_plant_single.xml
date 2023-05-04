@@ -8,15 +8,6 @@
     android:background="@color/appBackgroundColor"
     tools:context=".views.PlantSingleActivity">
 
-    <ImageView
-        android:id="@+id/btn_back"
-        android:layout_width="54dp"
-        android:layout_height="54dp"
-        android:layout_margin="16dp"
-        android:padding="4dp"
-        android:src="@drawable/icon_back"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <LinearLayout
         android:id="@+id/linearLayout"
@@ -359,5 +350,15 @@
                 app:layout_constraintTop_toBottomOf="@+id/btn_seeDiseases" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.core.widget.NestedScrollView>
+
+    <ImageView
+        android:id="@+id/btn_back"
+        android:layout_width="54dp"
+        android:layout_height="54dp"
+        android:layout_margin="16dp"
+        android:padding="4dp"
+        android:src="@drawable/icon_back"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

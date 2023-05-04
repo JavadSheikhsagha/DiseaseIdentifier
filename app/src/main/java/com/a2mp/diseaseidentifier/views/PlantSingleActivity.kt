@@ -41,7 +41,9 @@ class PlantSingleActivity : AppCompatActivity() {
         binding = ActivityPlantSingleBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        loadAd()
+        if (!AppSharedPref.getIsPurchased(this)) {
+            loadAd()
+        }
 
         getDataOfHealth()
 
@@ -99,9 +101,13 @@ class PlantSingleActivity : AppCompatActivity() {
         }
 
         binding.btnSeeDiseases.setOnClickListener {
-            val intent = Intent(this, PlantInfoActivity::class.java)
-            intent.putExtra("disease", DISEASE_MODEL)
-            startActivity(intent)
+            if (AppSharedPref.getIsPurchased(this)) {
+                val intent = Intent(this, PlantInfoActivity::class.java)
+                intent.putExtra("disease", DISEASE_MODEL)
+                startActivity(intent)
+            } else {
+                startActivity(Intent(this, PurchaseActivity::class.java))
+            }
         }
 
         DISEASE_MODEL?.let {
@@ -161,6 +167,13 @@ class PlantSingleActivity : AppCompatActivity() {
                 // Called when ad is shown.
                 Log.d("LOG37", "Ad showed fullscreen content.")
             }
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (AppSharedPref.getIsPurchased(this)) {
+            binding.btnPremium.visibility = View.GONE
         }
     }
 
