@@ -6,8 +6,10 @@ import android.os.Bundle
 import android.text.SpannableString
 import android.text.style.UnderlineSpan
 import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.a2mp.diseaseidentifier.databinding.ActivityPurchaseBinding
+import com.a2mp.diseaseidentifier.models.DiseaseResponseModel
 import com.a2mp.diseaseidentifier.repos.AppSharedPref
 import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.BillingProcessor.IPurchasesResponseListener
@@ -21,6 +23,8 @@ class PurchaseActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
     var bp: BillingProcessor? = null
 
 
+    private var DISEASE_MODEL: DiseaseResponseModel? = null
+
     private lateinit var binding: ActivityPurchaseBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,11 +32,18 @@ class PurchaseActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
         binding = ActivityPurchaseBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        getDataOfHealth()
 
         bp = BillingProcessor(this, "YOUR LICENSE KEY FROM GOOGLE PLAY CONSOLE HERE", this)
         bp?.initialize()
 
         setupViews()
+
+    }
+
+    private fun getDataOfHealth() {
+
+        DISEASE_MODEL = intent.extras?.getParcelable("disease")
 
     }
 
@@ -80,7 +91,7 @@ class PurchaseActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
         }
 
         binding.cardWeekly.setOnClickListener {
-            bp?.subscribe(this, "YOUR SUBSCRIPTION ID FROM GOOGLE PLAY CONSOLE HERE");
+            bp?.subscribe(this, "plant.weekly.sub");
         }
 
         binding.cardYearly.setOnClickListener {
@@ -90,14 +101,24 @@ class PurchaseActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
         binding.txtRestore.setOnClickListener {
             AppSharedPref.setIsPurchased(this@PurchaseActivity,true)
 
-            finish()
             bp?.loadOwnedPurchasesFromGoogleAsync(object : IPurchasesResponseListener {
                 override fun onPurchasesSuccess() {
                     Log.i("LOG29", "onPurchasesSuccess: success restore")
+                    finish()
+                    DISEASE_MODEL?.let {
+                        val intent = Intent(this@PurchaseActivity, PlantInfoActivity::class.java)
+                        intent.putExtra("disease", DISEASE_MODEL)
+                        startActivity(intent)
+                    }
                 }
 
                 override fun onPurchasesError() {
                     Log.i("LOG29", "onPurchasesSuccess: error restore")
+                    Toast.makeText(
+                        this@PurchaseActivity,
+                        "Restore didn't succeed.",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             })
         }
@@ -133,26 +154,24 @@ class PurchaseActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
         })
     }
 
-    override fun onBillingInitialized() {
-        /*
-    * Called when BillingProcessor was initialized and it's ready to purchase
-    */
-    }
+    override fun onBillingInitialized() {}
 
     override fun onProductPurchased(productId: String, details: PurchaseInfo?) {
-
+        Toast.makeText(this, "Did Purchase.", Toast.LENGTH_SHORT).show()
+        AppSharedPref.setIsPurchased(this,true)
+        finish()
+        DISEASE_MODEL?.let {
+            val intent = Intent(this@PurchaseActivity, PlantInfoActivity::class.java)
+            intent.putExtra("disease", DISEASE_MODEL)
+            startActivity(intent)
+        }
     }
 
     override fun onBillingError(errorCode: Int, error: Throwable?) {
 
     }
 
-    override fun onPurchaseHistoryRestored() {
-        /*
-    * Called when purchase history was restored and the list of all owned PRODUCT ID's
-    * was loaded from Google Play
-    */
-    }
+    override fun onPurchaseHistoryRestored() {}
 
     override fun onDestroy() {
         if (bp != null) {

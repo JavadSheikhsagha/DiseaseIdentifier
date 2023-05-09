@@ -29,7 +29,6 @@ class ErrorActivity : AppCompatActivity() {
         }
 
         binding.btnTakesnap.setOnClickListener {
-            startActivity(Intent(this, Camera2Activity::class.java))
             finish()
         }
 

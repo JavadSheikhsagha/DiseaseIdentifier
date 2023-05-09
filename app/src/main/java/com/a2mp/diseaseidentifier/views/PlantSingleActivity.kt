@@ -56,7 +56,7 @@ class PlantSingleActivity : AppCompatActivity() {
 
         val adRequest = AdRequest.Builder().build()
 
-        InterstitialAd.load(this,"ca-app-pub-3940256099942544/1033173712", adRequest, object : InterstitialAdLoadCallback() {
+        InterstitialAd.load(this,"ca-app-pub-6545436330357450/8930707803", adRequest, object : InterstitialAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 Log.d("LOG36", "${adError?.toString()}")
                 mInterstitialAd = null
@@ -106,7 +106,10 @@ class PlantSingleActivity : AppCompatActivity() {
                 intent.putExtra("disease", DISEASE_MODEL)
                 startActivity(intent)
             } else {
-                startActivity(Intent(this, PurchaseActivity::class.java))
+                startActivity(Intent(this, PurchaseActivity::class.java)
+                    .apply {
+                        putExtra("disease", DISEASE_MODEL)
+                    })
             }
         }
 

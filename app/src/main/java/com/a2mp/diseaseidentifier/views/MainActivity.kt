@@ -137,6 +137,7 @@ class MainActivity : AppCompatActivity() {
         super.onResume()
         if (AppSharedPref.getIsPurchased(this)) {
             binding.btnPremium.visibility = View.GONE
+            binding.adView.visibility = View.GONE
         }
     }
 

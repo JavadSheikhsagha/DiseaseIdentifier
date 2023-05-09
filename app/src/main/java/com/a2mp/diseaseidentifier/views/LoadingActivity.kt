@@ -3,6 +3,8 @@ package com.a2mp.diseaseidentifier.views
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.style.UnderlineSpan
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -51,14 +53,7 @@ class LoadingActivity : AppCompatActivity() {
 
 
         getHealthForPlant { plantName, disease ->
-            rewardedAd?.let { ad ->
-                ad.show(this) { rewardItem ->
-                    Log.d("LOG35", "User earned the reward.")
-                    Log.i("LOG26", "onCreate: $disease")
-                    adCallback(plantName, disease)
-                }
-            } ?: run {
-                Log.d("LOG35", "The rewarded ad wasn't ready yet.")
+            if (AppSharedPref.getIsPurchased(this)) {
                 if (disease?.images != null) {
 
                     val intent = Intent(this, PlantSingleActivity::class.java)
@@ -71,15 +66,43 @@ class LoadingActivity : AppCompatActivity() {
                         startActivity(intent)
                         finish()
                     }
-
-
                 } else {
                     Log.i("LOG28", "onCreate: ")
                     if (!isCanceled) {
                         startActivity(Intent(this, ErrorActivity::class.java))
                         finish()
                     }
+                }
+            } else {
+                rewardedAd?.let { ad ->
+                    ad.show(this) { rewardItem ->
+                        Log.d("LOG35", "User earned the reward.")
+                        Log.i("LOG26", "onCreate: $disease")
+                        adCallback(plantName, disease)
+                    }
+                } ?:
+                run {
+                    Log.d("LOG35", "The rewarded ad wasn't ready yet.")
+                    if (disease?.images != null) {
 
+                        val intent = Intent(this, PlantSingleActivity::class.java)
+                        intent.putExtra("disease", disease)
+                        intent.putExtra(
+                            "plant_name",
+                            getSingleStringFromCommonNames(plantName.results[0].species!!.commonNames)
+                        )
+                        if (!isCanceled) {
+                            startActivity(intent)
+                            finish()
+                        }
+                    } else {
+                        Log.i("LOG28", "onCreate: ")
+                        if (!isCanceled) {
+                            startActivity(Intent(this, ErrorActivity::class.java))
+                            finish()
+                        }
+
+                    }
                 }
             }
 
@@ -138,7 +161,7 @@ class LoadingActivity : AppCompatActivity() {
 
     private fun getHealthForPlant(function: (plantName:IdentifyModel, disease:DiseaseResponseModel?) -> Unit) {
 
-        viewModel.identifyModel.observe(this,) { identify ->
+        viewModel.identifyModel.observe(this) { identify ->
 
 
             if (identify?.bestMatch != null) {
@@ -157,7 +180,7 @@ class LoadingActivity : AppCompatActivity() {
     private fun loadRewardedAd(function: () -> Unit) {
 
         var adRequest = AdRequest.Builder().build()
-        RewardedAd.load(this,"ca-app-pub-3940256099942544/5224354917", adRequest, object : RewardedAdLoadCallback() {
+        RewardedAd.load(this,"ca-app-pub-6545436330357450/1685792548", adRequest, object : RewardedAdLoadCallback() {
             override fun onAdFailedToLoad(adError: LoadAdError) {
                 Log.d("LOG34", adError.toString())
                 rewardedAd = null
@@ -186,6 +209,10 @@ class LoadingActivity : AppCompatActivity() {
             isCanceled = true
             finish()
         }
+
+        val content = SpannableString("Cancel")
+        content.setSpan(UnderlineSpan(), 0, content.length, 0)
+        binding.cancelButton.text = content
 
         startOuter()
         startInner()
