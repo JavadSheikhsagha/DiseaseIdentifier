@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
+import androidx.appcompat.app.AppCompatDelegate
 import com.a2mp.diseaseidentifier.R
 import com.a2mp.diseaseidentifier.databinding.ActivityDiseaseSingleBinding
 import com.a2mp.diseaseidentifier.models.DiseaseModel
@@ -23,6 +25,9 @@ class DiseaseSingleActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        getWindow().setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         getHealthData()
 

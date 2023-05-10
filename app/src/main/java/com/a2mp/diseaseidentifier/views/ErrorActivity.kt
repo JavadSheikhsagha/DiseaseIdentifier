@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
 import com.a2mp.diseaseidentifier.databinding.ActivityErrorBinding
 import com.a2mp.diseaseidentifier.repos.AppSharedPref
@@ -20,6 +21,9 @@ class ErrorActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        getWindow().setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setupViews()
 

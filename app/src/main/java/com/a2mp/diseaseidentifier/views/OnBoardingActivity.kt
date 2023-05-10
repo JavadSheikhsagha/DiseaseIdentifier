@@ -2,6 +2,7 @@ package com.a2mp.diseaseidentifier.views
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatDelegate
 import com.a2mp.diseaseidentifier.R
 import com.a2mp.diseaseidentifier.databinding.ActivityOnBoardingBinding
@@ -16,6 +17,9 @@ class OnBoardingActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        getWindow().setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
 
         binding.btnOnBoardingActivityLetsgo.setOnClickListener {
