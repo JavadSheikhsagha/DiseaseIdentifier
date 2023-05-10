@@ -8,6 +8,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.annotation.Nullable
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.a2mp.diseaseidentifier.R
@@ -24,6 +25,8 @@ class NewCamActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityNewCamBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
 
         supportFragmentManager.beginTransaction().add(R.id.container,CameraFragment()).commit()

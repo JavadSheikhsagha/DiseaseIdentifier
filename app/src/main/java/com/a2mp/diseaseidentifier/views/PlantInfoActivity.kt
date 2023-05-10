@@ -6,6 +6,7 @@ import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.recyclerview.widget.GridLayoutManager
 import com.a2mp.diseaseidentifier.databinding.ActivityPlantInfoBinding
 import com.a2mp.diseaseidentifier.models.DiseaseResponseModel
@@ -30,6 +31,8 @@ class PlantInfoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPlantInfoBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         getDataOfHealth()
 

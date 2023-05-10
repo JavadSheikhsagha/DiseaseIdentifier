@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.AppCompatDelegate
 import com.a2mp.diseaseidentifier.databinding.ActivityErrorBinding
 import com.a2mp.diseaseidentifier.repos.AppSharedPref
 import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
@@ -17,6 +18,8 @@ class ErrorActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityErrorBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         setupViews()
 

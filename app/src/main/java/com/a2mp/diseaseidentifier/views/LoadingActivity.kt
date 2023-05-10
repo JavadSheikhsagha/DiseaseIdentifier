@@ -8,6 +8,7 @@ import android.text.style.UnderlineSpan
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.a2mp.diseaseidentifier.databinding.ActivityLoadingBinding
 import com.a2mp.diseaseidentifier.models.DiseaseResponseModel
 import com.a2mp.diseaseidentifier.models.IdentifyModel
@@ -35,6 +36,8 @@ class LoadingActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityLoadingBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         setupViews()
 

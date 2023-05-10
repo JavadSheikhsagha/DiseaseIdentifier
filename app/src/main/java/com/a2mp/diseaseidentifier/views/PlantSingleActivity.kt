@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import com.a2mp.diseaseidentifier.R
 import com.a2mp.diseaseidentifier.databinding.ActivityPlantSingleBinding
 import com.a2mp.diseaseidentifier.models.DiseaseResponseModel
@@ -40,6 +41,8 @@ class PlantSingleActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityPlantSingleBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
 
         if (!AppSharedPref.getIsPurchased(this)) {
             loadAd()
