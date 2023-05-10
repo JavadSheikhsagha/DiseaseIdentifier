@@ -16,11 +16,7 @@ import com.a2mp.diseaseidentifier.models.IdentifyModel
 import com.a2mp.diseaseidentifier.repos.AppSharedPref
 import com.a2mp.diseaseidentifier.viewmodel.MainViewModel
 import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
-import com.google.android.gms.ads.AdRequest
-import com.google.android.gms.ads.FullScreenContentCallback
-import com.google.android.gms.ads.LoadAdError
-import com.google.android.gms.ads.rewarded.RewardedAd
-import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import kotlinx.coroutines.*
 
 
 class LoadingActivity : AppCompatActivity() {
@@ -56,14 +52,14 @@ class LoadingActivity : AppCompatActivity() {
 
             if (viewModel.errorMessage == "") {
                 Log.i("LOG28", "onCreate: ${disease?.is_plant_probability!!}")
-                Log.i("LOG28", "onCreate: ${disease?.is_plant_probability!! < 0.60}")
+                Log.i("LOG28", "onCreate: ${disease?.is_plant_probability < 0.60}")
                 if (disease?.is_plant_probability!! < 0.60) {
                     startActivity(Intent(this, ErrorActivity::class.java)
                         .apply {
                             putExtra("msg","No Plant identified")
                         })
                     finish()
-                    Log.i("LOG28", "onCreate: ${disease?.is_plant_probability!! < 0.60}")
+                    Log.i("LOG28", "onCreate: ${disease?.is_plant_probability < 0.60}")
                 } else
                 if (AppSharedPref.getIsPurchased(this)) {
                     if (disease?.images != null) {
@@ -91,6 +87,7 @@ class LoadingActivity : AppCompatActivity() {
                 }
 
             } else {
+                Log.i("LOG28", "onCreate: ${disease?.is_plant_probability}")
                 startActivity(Intent(this, ErrorActivity::class.java).apply {
                     putExtra("msg",viewModel.errorMessage)
                 })
@@ -104,27 +101,40 @@ class LoadingActivity : AppCompatActivity() {
 
     private fun getHealthForPlant(function: (plantName:IdentifyModel, disease:DiseaseResponseModel?) -> Unit) {
 
+        val scope = CoroutineScope(
+            Job() + Dispatchers.Main
+        )
+        val job1 = scope.launch {
+            delay(15000)
+            startActivity(Intent(this@LoadingActivity, ErrorActivity::class.java).apply {
+                putExtra("msg", "timeout.")
+            })
+            finish()
+        }
+
+
+
         viewModel.identifyModel.observe(this) { identify ->
 
-
-            if (viewModel.errorMessage == "") {
-                if (identify?.bestMatch != null) {
-                    viewModel.healthStatusForModel.observe(this) {
-                        function(identify, it)
-                    }
-                } else {
-                    Log.i("LOG27", "onCreate: ")
-                    if (!isCanceled) {
-                        startActivity(Intent(this, ErrorActivity::class.java))
-                        finish()
-                    }
-
-                }
-            } else {
+            if (identify == null) {
                 startActivity(Intent(this, ErrorActivity::class.java).apply {
-                    putExtra("msg",viewModel.errorMessage)
+                    putExtra("msg", "No Plant Found.")
                 })
                 finish()
+            } else {
+                viewModel.healthStatusForModel.observe(this) {
+                    if (it == null) {
+                        Log.i("LOG24", "getHealthForPlant: no health")
+                        startActivity(Intent(this, ErrorActivity::class.java).apply {
+                            putExtra("msg", "No Plant Found.")
+                        })
+                        finish()
+                    } else {
+                        Log.i("LOG24", "getHealthForPlant: Hello did get and go to function")
+                        function(identify, it)
+                    }
+                    job1.cancel()
+                }
             }
         }
     }
@@ -194,5 +204,9 @@ class LoadingActivity : AppCompatActivity() {
             .start()
     }
 
+    override fun onStart() {
+        super.onStart()
+        viewModel.errorMessage = ""
+    }
 
 }
