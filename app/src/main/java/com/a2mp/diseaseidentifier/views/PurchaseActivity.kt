@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import com.a2mp.diseaseidentifier.databinding.ActivityPurchaseBinding
 import com.a2mp.diseaseidentifier.models.DiseaseResponseModel
 import com.a2mp.diseaseidentifier.repos.AppSharedPref
+import com.a2mp.diseaseidentifier.views.camera.userCameBack
 import com.anjlab.android.iab.v3.BillingProcessor
 import com.anjlab.android.iab.v3.BillingProcessor.IPurchasesResponseListener
 import com.anjlab.android.iab.v3.BillingProcessor.ISkuDetailsResponseListener
@@ -33,6 +34,9 @@ class PurchaseActivity : AppCompatActivity(), BillingProcessor.IBillingHandler {
         super.onCreate(savedInstanceState)
         binding = ActivityPurchaseBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        userCameBack = true
+
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,

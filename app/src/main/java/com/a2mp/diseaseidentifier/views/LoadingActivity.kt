@@ -114,9 +114,11 @@ class LoadingActivity : AppCompatActivity() {
                     }
                 } else {
                     Log.i("LOG27", "onCreate: ")
-                    if (!isCanceled)
+                    if (!isCanceled) {
                         startActivity(Intent(this, ErrorActivity::class.java))
-                    finish()
+                        finish()
+                    }
+
                 }
             } else {
                 startActivity(Intent(this, ErrorActivity::class.java).apply {

@@ -470,9 +470,12 @@ open class Camera2Activity : AppCompatActivity() {
     override fun onStart() {
         super.onStart()
 
-        if (imageBitmap != null && AppSharedPref.getIsPurchased(this)) {
+        if (imageBitmap != null && AppSharedPref.getIsPurchased(this) && userCameBack) {
             startActivity(Intent(this@Camera2Activity, LoadingActivity::class.java))
-            finish()
+            userCameBack = false
+
         }
     }
 }
+
+var userCameBack = false
