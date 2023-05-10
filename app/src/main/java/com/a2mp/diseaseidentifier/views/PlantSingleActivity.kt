@@ -29,9 +29,6 @@ import kotlinx.coroutines.*
 
 class PlantSingleActivity : AppCompatActivity() {
 
-    private var mInterstitialAd: InterstitialAd? = null
-
-
     private lateinit var binding : ActivityPlantSingleBinding
 
     private val viewModel by viewModels<MainViewModel>()
@@ -47,32 +44,12 @@ class PlantSingleActivity : AppCompatActivity() {
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        if (!AppSharedPref.getIsPurchased(this)) {
-            loadAd()
-        }
 
         getDataOfHealth()
 
         setupViews()
 
         getPlantData()
-    }
-
-    private fun loadAd() {
-
-        val adRequest = AdRequest.Builder().build()
-
-        InterstitialAd.load(this,"ca-app-pub-6545436330357450/8930707803", adRequest, object : InterstitialAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                Log.d("LOG36", "${adError?.toString()}")
-                mInterstitialAd = null
-            }
-
-            override fun onAdLoaded(interstitialAd: InterstitialAd) {
-                Log.d("LOG36", "Ad was loaded.")
-                mInterstitialAd = interstitialAd
-            }
-        })
     }
 
     private fun getPlantData() {
@@ -108,6 +85,7 @@ class PlantSingleActivity : AppCompatActivity() {
         binding.profileImage.setImageBitmap(imageBitmap)
 
         binding.btnBack.setOnClickListener {
+            imageBitmap = null
             finish()
         }
 
@@ -144,43 +122,11 @@ class PlantSingleActivity : AppCompatActivity() {
         }
 
         binding.btnTakesnap.setOnClickListener {
-            if (mInterstitialAd == null) {
-                finish()
-            } else {
-                mInterstitialAd?.show(this)
-                adCallback()
-            }
+            finish()
         }
 
         binding.btnPremium.setOnClickListener {
             startActivity(Intent(this, PurchaseActivity::class.java))
-        }
-    }
-
-    private fun adCallback() {
-
-        mInterstitialAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
-            override fun onAdClicked() {
-                // Called when a click is recorded for an ad.
-                Log.d("LOG37", "Ad was clicked.")
-            }
-
-            override fun onAdDismissedFullScreenContent() {
-                // Called when ad is dismissed.
-                Log.d("LOG37", "Ad dismissed fullscreen content.")
-                finish()
-                mInterstitialAd = null
-            }
-
-            override fun onAdImpression() {
-                // Called when an impression is recorded for an ad.
-                Log.d("LOG37", "Ad recorded an impression.")
-            }
-
-            override fun onAdShowedFullScreenContent() {
-                // Called when ad is shown.
-                Log.d("LOG37", "Ad showed fullscreen content.")
-            }
         }
     }
 

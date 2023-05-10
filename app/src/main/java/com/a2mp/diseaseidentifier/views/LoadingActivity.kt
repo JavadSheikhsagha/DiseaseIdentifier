@@ -25,7 +25,6 @@ import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
 
 class LoadingActivity : AppCompatActivity() {
 
-    private var rewardedAd: RewardedAd? = null
     private var isCanceled = false
 
     private lateinit var binding: ActivityLoadingBinding
@@ -44,12 +43,6 @@ class LoadingActivity : AppCompatActivity() {
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setupViews()
-
-        if (!AppSharedPref.getIsPurchased(this)) {
-            loadRewardedAd {
-
-            }
-        }
 
         imageBitmap?.let {
             Log.i("LOG25", "onCreate: isnt null")
@@ -95,39 +88,6 @@ class LoadingActivity : AppCompatActivity() {
                             finish()
                         }
                     }
-                } else {
-                    rewardedAd?.let { ad ->
-                        ad.show(this) { rewardItem ->
-                            Log.d("LOG35", "User earned the reward.")
-                            Log.i("LOG26", "onCreate: $disease")
-                        }
-                    } ?:
-                    run {
-                        Log.d("LOG35", "The rewarded ad wasn't ready yet.")
-                        if (disease?.images != null) {
-
-                            val intent = Intent(this, PlantSingleActivity::class.java)
-                            intent.putExtra("disease", disease)
-                            intent.putExtra(
-                                "plant_name",
-                                getSingleStringFromCommonNames(plantName.results[0].species!!.commonNames)
-                            )
-                            if (!isCanceled) {
-                                startActivity(intent)
-                                finish()
-                            }
-                        } else {
-                            Log.i("LOG28", "onCreate: ")
-                            if (!isCanceled) {
-                                startActivity(Intent(this, ErrorActivity::class.java)
-                                    .apply {
-                                        putExtra("msg",viewModel.errorMessage)
-                                    })
-                                finish()
-                            }
-
-                        }
-                    }
                 }
 
             } else {
@@ -165,22 +125,6 @@ class LoadingActivity : AppCompatActivity() {
                 finish()
             }
         }
-    }
-
-    private fun loadRewardedAd(function: () -> Unit) {
-
-        var adRequest = AdRequest.Builder().build()
-        RewardedAd.load(this,"ca-app-pub-6545436330357450/1685792548", adRequest, object : RewardedAdLoadCallback() {
-            override fun onAdFailedToLoad(adError: LoadAdError) {
-                Log.d("LOG34", adError.toString())
-                rewardedAd = null
-            }
-
-            override fun onAdLoaded(ad: RewardedAd) {
-                Log.d("LOG34", "Ad was loaded.")
-                rewardedAd = ad
-            }
-        })
     }
 
     private fun getSingleStringFromCommonNames(commonNames: List<String>): String? {

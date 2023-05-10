@@ -28,8 +28,10 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.a2mp.diseaseidentifier.R
+import com.a2mp.diseaseidentifier.repos.AppSharedPref
 import com.a2mp.diseaseidentifier.viewmodel.imageBitmap
 import com.a2mp.diseaseidentifier.views.LoadingActivity
+import com.a2mp.diseaseidentifier.views.PurchaseActivity
 import com.permissionx.guolindev.PermissionX
 import java.io.File
 import java.util.*
@@ -230,7 +232,11 @@ open class Camera2Activity : AppCompatActivity() {
 
                 imageBitmap = bitmap
 
-                startActivity(Intent(this, LoadingActivity::class.java))
+                if (AppSharedPref.getIsPurchased(this)) {
+                    startActivity(Intent(this, LoadingActivity::class.java))
+                } else {
+                    startActivity(Intent(this, PurchaseActivity::class.java))
+                }
             }
         }
     }
@@ -292,7 +298,11 @@ open class Camera2Activity : AppCompatActivity() {
                             //update the UI on main thread
                             imageBitmap = textureView?.bitmap
 
-                            startActivity(Intent(this@Camera2Activity, LoadingActivity::class.java))
+                            if (AppSharedPref.getIsPurchased(this@Camera2Activity)) {
+                                startActivity(Intent(this@Camera2Activity, LoadingActivity::class.java))
+                            } else {
+                                startActivity(Intent(this@Camera2Activity, PurchaseActivity::class.java))
+                            }
                         }
                     }.start()
                     createCameraPreview()
@@ -455,5 +465,14 @@ open class Camera2Activity : AppCompatActivity() {
 
         private const val REQUEST_CAMERA_PERMISSION = 200
         const val PICK_IMAGE = 1
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        if (imageBitmap != null && AppSharedPref.getIsPurchased(this)) {
+            startActivity(Intent(this@Camera2Activity, LoadingActivity::class.java))
+            finish()
+        }
     }
 }
