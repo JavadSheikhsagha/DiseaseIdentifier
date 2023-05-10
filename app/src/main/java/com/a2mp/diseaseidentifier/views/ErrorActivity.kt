@@ -43,6 +43,8 @@ class ErrorActivity : AppCompatActivity() {
             startActivity(Intent(this, PurchaseActivity::class.java))
         }
 
+        binding.textView5.text = intent.extras?.getString("msg", "")
+
         binding.imgPlantInfoImage.setImageBitmap(imageBitmap)
 
         if (AppSharedPref.getIsPurchased(this)) {

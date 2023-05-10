@@ -7,8 +7,8 @@
 
     <TextureView
         android:id="@+id/texture"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_alignParentTop="true" />
 
     <ImageView
@@ -69,7 +69,7 @@
                 android:id="@+id/img_gallery"
                 android:layout_width="64dp"
                 android:layout_height="64dp"
-                android:src="@drawable/img_plantsingle_healthy" />
+                android:src="@drawable/img_gallery" />
 
         </androidx.cardview.widget.CardView>
 

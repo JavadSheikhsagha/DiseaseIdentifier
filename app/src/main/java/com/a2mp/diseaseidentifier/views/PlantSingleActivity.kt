@@ -81,9 +81,14 @@ class PlantSingleActivity : AppCompatActivity() {
 
         viewModel.getPlantDataLiveData.observe(this) {
 
-            binding.txtPlantLighting.text = if (it?.get(0)?.climate?.light == null) "Part Sun" else it[0].climate?.light?.capitalize()
-            binding.txtPlantDifficulty.text = if (it?.get(0)?.climate?.difficulty == null) "Medium%" else it[0].climate?.difficulty?.capitalize()
-            binding.txtPlantTempreture.text = if (it?.get(0)?.climate?.absolute_min_temp == null) "4" else it[0].climate?.absolute_min_temp?.capitalize()
+            try {
+
+                binding.txtPlantLighting.text = if (it?.get(0)?.climate?.light == null) "Part Sun" else it[0]?.climate?.light?.capitalize()
+                binding.txtPlantDifficulty.text = if (it?.get(0)?.climate?.difficulty == null) "Medium%" else it[0]?.climate?.difficulty?.capitalize()
+                binding.txtPlantTempreture.text = if (it?.get(0)?.climate?.absolute_min_temp == null) "4" else it[0]?.climate?.absolute_min_temp?.capitalize()
+            }catch (e:java.lang.Exception) {
+
+            }
 
         }
     }
@@ -122,7 +127,7 @@ class PlantSingleActivity : AppCompatActivity() {
         DISEASE_MODEL?.let {
 
             binding.txtAccuracy.text =
-                "${((it.is_plant_probability?.times(100))?.toInt()).toString()}% Accuracy"
+                "${((it.is_plant_probability.times(100)).toInt())}% Accuracy"
 
             if (it.healthAssessment!!.is_healthy == false) {
 

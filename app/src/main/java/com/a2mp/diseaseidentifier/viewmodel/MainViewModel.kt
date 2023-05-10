@@ -26,7 +26,8 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
     val identifyModel : MutableLiveData<IdentifyModel?> = MutableLiveData()
     val healthStatusForModel: MutableLiveData<DiseaseResponseModel?> = MutableLiveData()
-    val getPlantDataLiveData: MutableLiveData<List<GetPlantDataModel>?> = MutableLiveData()
+    val getPlantDataLiveData: MutableLiveData<List<GetPlantDataModel?>?> = MutableLiveData()
+    var errorMessage : String = ""
 
 
     fun identify(file: Bitmap) {
@@ -38,7 +39,14 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     override fun onResponse(call: Call<IdentifyModel?>, response: Response<IdentifyModel?>) {
                         Log.i("LOG23", "onResponse: DID GET identify")
 
+                        if (response.body() == null) {
+                            errorMessage = "No Plant Found."
+                        }
+
                         response.body()?.let {
+                            if ((it.statusCode?.rem(100) ?: 0) != 2) {
+                                errorMessage
+                            }
 
                             plant_name = it.bestMatch
                             Log.i("LOG800", "onResponse: ${it.bestMatch}")
@@ -49,6 +57,7 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                     override fun onFailure(call: Call<IdentifyModel?>, t: Throwable) {
                         Log.i("LOG23", "onResponse: DIDnt GET identify ${t.message}")
+                        errorMessage = if (t.message != null) t.message!! else "failed to get \ninformation from server."
                         identifyModel.postValue(null)
 
                     }
@@ -92,6 +101,10 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
                     ) {
                         Log.i("LOG24", "onResponse: DID getHealthStatusDirectFor")
 
+                        if (response.body() == null) {
+                            errorMessage = "No Plant Found."
+                            healthStatusForModel.postValue(null)
+                        }
                         response.body()?.let {
                             healthStatusForModel.postValue(it)
                         }
@@ -99,7 +112,9 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
 
                     override fun onFailure(call: Call<DiseaseResponseModel?>, t: Throwable) {
                         Log.i("LOG24", "onResponse: DIDnt getHealthStatusDirectFor ${t.localizedMessage}")
+                        errorMessage = if (t.message != null) t.message!! else "failed to get information \nfrom server."
                         healthStatusForModel.postValue(null)
+
                     }
                 })
         }

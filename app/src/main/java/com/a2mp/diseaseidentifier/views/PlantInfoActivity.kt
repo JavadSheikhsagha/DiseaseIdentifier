@@ -50,12 +50,17 @@ class PlantInfoActivity : AppCompatActivity() {
 
         viewModel.getPlantDataLiveData.observe(this) {
 
-            binding.txtPlantLighting.text = if (it?.get(0)?.climate?.light == null) "Part Sun" else it.get(0).climate?.light?.capitalize()
-            binding.txtPlantHumidity.text = if (it?.get(0)?.climate?.humidity == null) "50%" else it.get(0).climate?.humidity
-            binding.txtPlantTemperature.text = if (it?.get(0)?.climate?.absolute_min_temp == null) "4" else it.get(0).climate?.absolute_min_temp
-            binding.txtPlantDifficulty.text = if (it?.get(0)?.climate?.difficulty == null) "MEDIUM" else it.get(0).climate?.difficulty?.capitalize()
-            binding.txtPlantToxic.text = if (it?.get(0)?.climate?.poison_type == null) "NONE" else it.get(0).climate?.poison_type?.capitalize()
-            binding.txtPlantIsWeed.text = it?.get(0)?.is_weed.toString().capitalize()
+            try {
+
+                binding.txtPlantLighting.text = if (it?.get(0)?.climate?.light == null) "Part Sun" else it?.get(0)?.climate?.light?.capitalize()
+                binding.txtPlantHumidity.text = if (it?.get(0)?.climate?.humidity == null) "50%" else it?.get(0)?.climate?.humidity
+                binding.txtPlantTemperature.text = if (it?.get(0)?.climate?.absolute_min_temp == null) "4" else it.get(0)?.climate?.absolute_min_temp
+                binding.txtPlantDifficulty.text = if (it?.get(0)?.climate?.difficulty == null) "MEDIUM" else it.get(0)?.climate?.difficulty?.capitalize()
+                binding.txtPlantToxic.text = if (it?.get(0)?.climate?.poison_type == null) "NONE" else it.get(0)?.climate?.poison_type?.capitalize()
+                binding.txtPlantIsWeed.text = it?.get(0)?.is_weed.toString().capitalize()
+            } catch (e:java.lang.Exception) {
+
+            }
 
         }
     }

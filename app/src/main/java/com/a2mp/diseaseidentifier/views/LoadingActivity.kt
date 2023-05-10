@@ -39,7 +39,8 @@ class LoadingActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+        getWindow().setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setupViews()
@@ -59,36 +60,19 @@ class LoadingActivity : AppCompatActivity() {
 
 
         getHealthForPlant { plantName, disease ->
-            if (AppSharedPref.getIsPurchased(this)) {
-                if (disease?.images != null) {
 
-                    val intent = Intent(this, PlantSingleActivity::class.java)
-                    intent.putExtra("disease", disease)
-                    intent.putExtra(
-                        "plant_name",
-                        getSingleStringFromCommonNames(plantName.results[0].species!!.commonNames)
-                    )
-                    if (!isCanceled) {
-                        startActivity(intent)
-                        finish()
-                    }
-                } else {
-                    Log.i("LOG28", "onCreate: ")
-                    if (!isCanceled) {
-                        startActivity(Intent(this, ErrorActivity::class.java))
-                        finish()
-                    }
-                }
-            } else {
-                rewardedAd?.let { ad ->
-                    ad.show(this) { rewardItem ->
-                        Log.d("LOG35", "User earned the reward.")
-                        Log.i("LOG26", "onCreate: $disease")
-                        adCallback(plantName, disease)
-                    }
-                } ?:
-                run {
-                    Log.d("LOG35", "The rewarded ad wasn't ready yet.")
+            if (viewModel.errorMessage == "") {
+                Log.i("LOG28", "onCreate: ${disease?.is_plant_probability!!}")
+                Log.i("LOG28", "onCreate: ${disease?.is_plant_probability!! < 0.60}")
+                if (disease?.is_plant_probability!! < 0.60) {
+                    startActivity(Intent(this, ErrorActivity::class.java)
+                        .apply {
+                            putExtra("msg","No Plant identified")
+                        })
+                    finish()
+                    Log.i("LOG28", "onCreate: ${disease?.is_plant_probability!! < 0.60}")
+                } else
+                if (AppSharedPref.getIsPurchased(this)) {
                     if (disease?.images != null) {
 
                         val intent = Intent(this, PlantSingleActivity::class.java)
@@ -104,65 +88,58 @@ class LoadingActivity : AppCompatActivity() {
                     } else {
                         Log.i("LOG28", "onCreate: ")
                         if (!isCanceled) {
-                            startActivity(Intent(this, ErrorActivity::class.java))
+                            startActivity(Intent(this, ErrorActivity::class.java)
+                                .apply {
+                                    putExtra("msg",viewModel.errorMessage)
+                                })
                             finish()
                         }
-
                     }
-                }
-            }
-
-        }
-
-
-    }
-
-    private fun adCallback(plantName: IdentifyModel, disease: DiseaseResponseModel?) {
-
-        rewardedAd?.fullScreenContentCallback = object: FullScreenContentCallback() {
-            override fun onAdClicked() {
-                // Called when a click is recorded for an ad.
-                Log.d("LOG37", "Ad was clicked.")
-            }
-
-            override fun onAdDismissedFullScreenContent() {
-                // Called when ad is dismissed.
-                Log.d("LOG37", "Ad dismissed fullscreen content.")
-                if (disease?.images != null) {
-
-                    val intent = Intent(this@LoadingActivity, PlantSingleActivity::class.java)
-                    intent.putExtra("disease", disease)
-                    intent.putExtra(
-                        "plant_name",
-                        getSingleStringFromCommonNames(plantName.results[0].species!!.commonNames)
-                    )
-                    if (!isCanceled) {
-                        startActivity(intent)
-                        finish()
-                    }
-
-
                 } else {
-                    Log.i("LOG28", "onCreate: ")
-                    if (!isCanceled) {
-                        startActivity(Intent(this@LoadingActivity, ErrorActivity::class.java))
-                        finish()
+                    rewardedAd?.let { ad ->
+                        ad.show(this) { rewardItem ->
+                            Log.d("LOG35", "User earned the reward.")
+                            Log.i("LOG26", "onCreate: $disease")
+                        }
+                    } ?:
+                    run {
+                        Log.d("LOG35", "The rewarded ad wasn't ready yet.")
+                        if (disease?.images != null) {
+
+                            val intent = Intent(this, PlantSingleActivity::class.java)
+                            intent.putExtra("disease", disease)
+                            intent.putExtra(
+                                "plant_name",
+                                getSingleStringFromCommonNames(plantName.results[0].species!!.commonNames)
+                            )
+                            if (!isCanceled) {
+                                startActivity(intent)
+                                finish()
+                            }
+                        } else {
+                            Log.i("LOG28", "onCreate: ")
+                            if (!isCanceled) {
+                                startActivity(Intent(this, ErrorActivity::class.java)
+                                    .apply {
+                                        putExtra("msg",viewModel.errorMessage)
+                                    })
+                                finish()
+                            }
+
+                        }
                     }
-
                 }
-                rewardedAd = null
+
+            } else {
+                startActivity(Intent(this, ErrorActivity::class.java).apply {
+                    putExtra("msg",viewModel.errorMessage)
+                })
+                finish()
             }
 
-            override fun onAdImpression() {
-                // Called when an impression is recorded for an ad.
-                Log.d("LOG37", "Ad recorded an impression.")
-            }
-
-            override fun onAdShowedFullScreenContent() {
-                // Called when ad is shown.
-                Log.d("LOG37", "Ad showed fullscreen content.")
-            }
         }
+
+
     }
 
     private fun getHealthForPlant(function: (plantName:IdentifyModel, disease:DiseaseResponseModel?) -> Unit) {
@@ -170,14 +147,21 @@ class LoadingActivity : AppCompatActivity() {
         viewModel.identifyModel.observe(this) { identify ->
 
 
-            if (identify?.bestMatch != null) {
-                viewModel.healthStatusForModel.observe(this) {
-                    function(identify, it)
+            if (viewModel.errorMessage == "") {
+                if (identify?.bestMatch != null) {
+                    viewModel.healthStatusForModel.observe(this) {
+                        function(identify, it)
+                    }
+                } else {
+                    Log.i("LOG27", "onCreate: ")
+                    if (!isCanceled)
+                        startActivity(Intent(this, ErrorActivity::class.java))
+                    finish()
                 }
             } else {
-                Log.i("LOG27", "onCreate: ")
-                if (!isCanceled)
-                    startActivity(Intent(this, ErrorActivity::class.java))
+                startActivity(Intent(this, ErrorActivity::class.java).apply {
+                    putExtra("msg",viewModel.errorMessage)
+                })
                 finish()
             }
         }

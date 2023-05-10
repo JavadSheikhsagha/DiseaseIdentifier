@@ -1,9 +1,9 @@
 package com.a2mp.diseaseidentifier.views.camera
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.database.Cursor
 import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
@@ -371,6 +371,9 @@ open class Camera2Activity : AppCompatActivity() {
             val characteristics = manager.getCameraCharacteristics(cameraId!!)
             val map = characteristics.get(CameraCharacteristics.SCALER_STREAM_CONFIGURATION_MAP)!!
             imageDimension = map.getOutputSizes(SurfaceTexture::class.java)[0]
+
+
+
             // Add permission for camera and let user grant the permission
             if (ActivityCompat.checkSelfPermission(
                     this,
